@@ -151,6 +151,94 @@
           placeholder="ex: 1px solid #000">
       </div>
     </div>
+
+    @if (isFormElement) {
+      <div class="property-section">
+        <h4>Attributs de formulaire</h4>
+
+        @if (selectedElement.type === 'input' || selectedElement.type === 'textarea' || selectedElement.type === 'select' || selectedElement.type === 'checkbox' || selectedElement.type === 'radio') {
+          <div class="property-group">
+            <label>Nom (name)</label>
+            <input
+              type="text"
+              [value]="selectedElement.formAttributes?.name || ''"
+              (input)="updateFormAttribute('name', $any($event.target).value)"
+              placeholder="nom_du_champ">
+          </div>
+        }
+
+        @if (selectedElement.type === 'input' || selectedElement.type === 'textarea') {
+          <div class="property-group">
+            <label>Placeholder</label>
+            <input
+              type="text"
+              [value]="selectedElement.formAttributes?.placeholder || ''"
+              (input)="updateFormAttribute('placeholder', $any($event.target).value)">
+          </div>
+        }
+
+        @if (selectedElement.type === 'input') {
+          <div class="property-group">
+            <label>Type d'input</label>
+            <select
+              [value]="selectedElement.formAttributes?.inputType || 'text'"
+              (change)="updateFormAttribute('inputType', $any($event.target).value)">
+              <option value="text">Texte</option>
+              <option value="email">Email</option>
+              <option value="password">Mot de passe</option>
+              <option value="number">Nombre</option>
+              <option value="tel">Téléphone</option>
+              <option value="url">URL</option>
+              <option value="date">Date</option>
+            </select>
+          </div>
+        }
+
+        @if (selectedElement.type === 'textarea') {
+          <div class="property-group">
+            <label>Nombre de lignes (rows)</label>
+            <input
+              type="number"
+              [value]="selectedElement.formAttributes?.rows || 4"
+              (input)="updateFormAttribute('rows', parseInt($any($event.target).value))">
+          </div>
+        }
+
+        @if (selectedElement.type === 'checkbox') {
+          <div class="property-group">
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                [checked]="selectedElement.formAttributes?.checked || false"
+                (change)="updateFormAttribute('checked', $any($event.target).checked)">
+              <span>Coché par défaut</span>
+            </label>
+          </div>
+        }
+
+        @if (selectedElement.type === 'input' || selectedElement.type === 'textarea' || selectedElement.type === 'select' || selectedElement.type === 'checkbox') {
+          <div class="property-group">
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                [checked]="selectedElement.formAttributes?.required || false"
+                (change)="updateFormAttribute('required', $any($event.target).checked)">
+              <span>Champ requis</span>
+            </label>
+          </div>
+
+          <div class="property-group">
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                [checked]="selectedElement.formAttributes?.disabled || false"
+                (change)="updateFormAttribute('disabled', $any($event.target).checked)">
+              <span>Désactivé</span>
+            </label>
+          </div>
+        }
+      </div>
+    }
   } @else {
     <div class="no-selection">
       <p>Sélectionnez un élément pour éditer ses propriétés</p>

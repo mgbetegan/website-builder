@@ -31,6 +31,58 @@
             {{ element.children && element.children.length > 0 ? '' : 'Container vide' }}
           </div>
         }
+        @case ('form') {
+          <div class="form-content">
+            {{ element.children && element.children.length > 0 ? '' : 'Formulaire vide - Ajoutez des champs' }}
+          </div>
+        }
+        @case ('input') {
+          <input class="input-content"
+                 [type]="element.formAttributes?.inputType || 'text'"
+                 [placeholder]="element.formAttributes?.placeholder || ''"
+                 [disabled]="true" />
+        }
+        @case ('textarea') {
+          <textarea class="textarea-content"
+                    [placeholder]="element.formAttributes?.placeholder || ''"
+                    [rows]="element.formAttributes?.rows || 4"
+                    [disabled]="true"></textarea>
+        }
+        @case ('select') {
+          <select class="select-content" [disabled]="true">
+            @if (element.formAttributes?.options) {
+              @for (option of element.formAttributes.options; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            }
+          </select>
+        }
+        @case ('checkbox') {
+          <label class="checkbox-content">
+            <input type="checkbox"
+                   [checked]="element.formAttributes?.checked || false"
+                   [disabled]="true" />
+            <span>{{ element.content }}</span>
+          </label>
+        }
+        @case ('radio') {
+          <div class="radio-content">
+            @if (element.formAttributes?.options) {
+              @for (option of element.formAttributes.options; track option.value) {
+                <label>
+                  <input type="radio"
+                         [name]="element.formAttributes?.name || 'radio'"
+                         [value]="option.value"
+                         [disabled]="true" />
+                  <span>{{ option.label }}</span>
+                </label>
+              }
+            }
+          </div>
+        }
+        @case ('label') {
+          <label class="label-content">{{ element.content }}</label>
+        }
       }
 
       @if (isSelected(element.id)) {

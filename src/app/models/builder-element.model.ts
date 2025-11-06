@@ -1,7 +1,39 @@
+export type ElementType =
+  | 'text'
+  | 'image'
+  | 'button'
+  | 'container'
+  | 'form'
+  | 'input'
+  | 'textarea'
+  | 'select'
+  | 'checkbox'
+  | 'radio'
+  | 'label';
+
+export interface FormAttributes {
+  name?: string;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
+  readonly?: boolean;
+  value?: string;
+  inputType?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'date';
+  options?: { label: string; value: string }[]; // For select, radio
+  checked?: boolean; // For checkbox, radio
+  rows?: number; // For textarea
+  cols?: number; // For textarea
+  min?: number;
+  max?: number;
+  pattern?: string;
+  labelFor?: string; // For label
+}
+
 export interface BuilderElement {
   id: string;
-  type: 'text' | 'image' | 'button' | 'container';
+  type: ElementType;
   content?: string;
+  formAttributes?: FormAttributes;
   styles: {
     position: 'absolute' | 'relative';
     top: string;
@@ -26,9 +58,11 @@ export interface BuilderElement {
 }
 
 export interface ComponentTemplate {
-  type: 'text' | 'image' | 'button' | 'container';
+  type: ElementType;
   label: string;
   icon: string;
+  category: 'basic' | 'form';
   defaultStyles: Partial<BuilderElement['styles']>;
   defaultContent?: string;
+  defaultFormAttributes?: FormAttributes;
 }

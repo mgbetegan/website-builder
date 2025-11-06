@@ -17,6 +17,14 @@ export class ToolbarComponent {
     this.componentTemplates = builderService.componentTemplates;
   }
 
+  get basicComponents(): ComponentTemplate[] {
+    return this.componentTemplates.filter(t => t.category === 'basic');
+  }
+
+  get formComponents(): ComponentTemplate[] {
+    return this.componentTemplates.filter(t => t.category === 'form');
+  }
+
   onDragStart(event: DragEvent, template: ComponentTemplate): void {
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'copy';

@@ -1,8 +1,22 @@
 <div class="toolbar">
   <div class="toolbar-section">
-    <h3>Composants</h3>
+    <h3>Composants de base</h3>
     <div class="component-list">
-      @for (template of componentTemplates; track template.type) {
+      @for (template of basicComponents; track template.type) {
+        <div class="component-item"
+             draggable="true"
+             (dragstart)="onDragStart($event, template)">
+          <span class="component-icon">{{ template.icon }}</span>
+          <span class="component-label">{{ template.label }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="toolbar-section">
+    <h3>Composants de formulaire</h3>
+    <div class="component-list">
+      @for (template of formComponents; track template.type) {
         <div class="component-item"
              draggable="true"
              (dragstart)="onDragStart($event, template)">

@@ -96,6 +96,26 @@
   }
 }
 
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px !important;
+  font-weight: normal !important;
+  margin-bottom: 0 !important;
+
+  input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  span {
+    user-select: none;
+  }
+}
+
 .color-input-group {
   display: flex;
   gap: 8px;

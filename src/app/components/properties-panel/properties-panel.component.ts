@@ -36,6 +36,14 @@ export class PropertiesPanelComponent implements OnInit {
     }
   }
 
+  updateFormAttribute(property: string, value: any): void {
+    if (this.selectedElement) {
+      this.builderService.updateFormAttributes(this.selectedElement.id, {
+        [property]: value
+      });
+    }
+  }
+
   deleteElement(): void {
     if (this.selectedElement && confirm('Supprimer cet élément ?')) {
       this.builderService.deleteElement(this.selectedElement.id);
@@ -43,6 +51,14 @@ export class PropertiesPanelComponent implements OnInit {
   }
 
   get canEditContent(): boolean {
-    return this.selectedElement?.type !== 'container';
+    const type = this.selectedElement?.type;
+    return type !== 'container' && type !== 'form' && type !== 'input' &&
+           type !== 'textarea' && type !== 'select' && type !== 'radio';
+  }
+
+  get isFormElement(): boolean {
+    const type = this.selectedElement?.type;
+    return type === 'input' || type === 'textarea' || type === 'select' ||
+           type === 'checkbox' || type === 'radio' || type === 'label' || type === 'form';
   }
 }
