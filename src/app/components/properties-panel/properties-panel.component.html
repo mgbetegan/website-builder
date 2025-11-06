@@ -1,0 +1,159 @@
+<div class="properties-panel">
+  @if (selectedElement) {
+    <div class="panel-header">
+      <h3>Propriétés</h3>
+      <button class="delete-button" (click)="deleteElement()">🗑️</button>
+    </div>
+
+    <div class="property-section">
+      <h4>Type: {{ selectedElement.type }}</h4>
+    </div>
+
+    @if (canEditContent) {
+      <div class="property-section">
+        <label>Contenu</label>
+        @if (selectedElement.type === 'text') {
+          <textarea
+            [value]="selectedElement.content || ''"
+            (input)="updateContent($any($event.target).value)"
+            rows="3"></textarea>
+        } @else {
+          <input
+            type="text"
+            [value]="selectedElement.content || ''"
+            (input)="updateContent($any($event.target).value)">
+        }
+      </div>
+    }
+
+    <div class="property-section">
+      <h4>Position & Dimensions</h4>
+
+      <div class="property-group">
+        <label>Largeur</label>
+        <input
+          type="text"
+          [value]="selectedElement.styles.width"
+          (input)="updateStyle('width', $any($event.target).value)">
+      </div>
+
+      <div class="property-group">
+        <label>Hauteur</label>
+        <input
+          type="text"
+          [value]="selectedElement.styles.height"
+          (input)="updateStyle('height', $any($event.target).value)">
+      </div>
+
+      <div class="property-group">
+        <label>Top</label>
+        <input
+          type="text"
+          [value]="selectedElement.styles.top"
+          (input)="updateStyle('top', $any($event.target).value)">
+      </div>
+
+      <div class="property-group">
+        <label>Left</label>
+        <input
+          type="text"
+          [value]="selectedElement.styles.left"
+          (input)="updateStyle('left', $any($event.target).value)">
+      </div>
+    </div>
+
+    <div class="property-section">
+      <h4>Style</h4>
+
+      @if (selectedElement.type !== 'image') {
+        <div class="property-group">
+          <label>Couleur de fond</label>
+          <div class="color-input-group">
+            <input
+              type="color"
+              [value]="selectedElement.styles.backgroundColor || '#ffffff'"
+              (input)="updateStyle('backgroundColor', $any($event.target).value)">
+            <input
+              type="text"
+              [value]="selectedElement.styles.backgroundColor || '#ffffff'"
+              (input)="updateStyle('backgroundColor', $any($event.target).value)">
+          </div>
+        </div>
+      }
+
+      @if (selectedElement.type === 'text' || selectedElement.type === 'button') {
+        <div class="property-group">
+          <label>Couleur du texte</label>
+          <div class="color-input-group">
+            <input
+              type="color"
+              [value]="selectedElement.styles.color || '#000000'"
+              (input)="updateStyle('color', $any($event.target).value)">
+            <input
+              type="text"
+              [value]="selectedElement.styles.color || '#000000'"
+              (input)="updateStyle('color', $any($event.target).value)">
+          </div>
+        </div>
+
+        <div class="property-group">
+          <label>Taille de police</label>
+          <input
+            type="text"
+            [value]="selectedElement.styles.fontSize || '16px'"
+            (input)="updateStyle('fontSize', $any($event.target).value)">
+        </div>
+
+        <div class="property-group">
+          <label>Épaisseur de police</label>
+          <select
+            [value]="selectedElement.styles.fontWeight || 'normal'"
+            (change)="updateStyle('fontWeight', $any($event.target).value)">
+            <option value="normal">Normal</option>
+            <option value="bold">Gras</option>
+            <option value="lighter">Léger</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="300">300</option>
+            <option value="400">400</option>
+            <option value="500">500</option>
+            <option value="600">600</option>
+            <option value="700">700</option>
+            <option value="800">800</option>
+            <option value="900">900</option>
+          </select>
+        </div>
+      }
+
+      <div class="property-group">
+        <label>Padding</label>
+        <input
+          type="text"
+          [value]="selectedElement.styles.padding || '0px'"
+          (input)="updateStyle('padding', $any($event.target).value)"
+          placeholder="ex: 10px ou 10px 20px">
+      </div>
+
+      <div class="property-group">
+        <label>Border Radius</label>
+        <input
+          type="text"
+          [value]="selectedElement.styles.borderRadius || '0px'"
+          (input)="updateStyle('borderRadius', $any($event.target).value)">
+      </div>
+
+      <div class="property-group">
+        <label>Border</label>
+        <input
+          type="text"
+          [value]="selectedElement.styles.border || 'none'"
+          (input)="updateStyle('border', $any($event.target).value)"
+          placeholder="ex: 1px solid #000">
+      </div>
+    </div>
+  } @else {
+    <div class="no-selection">
+      <p>Sélectionnez un élément pour éditer ses propriétés</p>
+    </div>
+  }
+</div>

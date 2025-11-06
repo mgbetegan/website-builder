@@ -1,0 +1,46 @@
+<div class="canvas-container"
+     (click)="deselectAll()"
+     (drop)="onCanvasDrop($event)"
+     (dragover)="onCanvasDragOver($event)">
+
+  <div class="canvas-info">
+    <p>Glissez des composants ici pour commencer</p>
+  </div>
+
+  @for (element of elements; track element.id) {
+    <div [ngClass]="['builder-element', 'element-' + element.type, isSelected(element.id) ? 'selected' : '']"
+         [ngStyle]="element.styles"
+         [id]="element.id"
+         cdkDrag
+         [cdkDragFreeDragPosition]="{x: 0, y: 0}"
+         (cdkDragEnded)="onDragEnded($event, element)"
+         (click)="selectElement(element, $event)">
+
+      @switch (element.type) {
+        @case ('text') {
+          <div class="text-content">{{ element.content }}</div>
+        }
+        @case ('button') {
+          <button class="button-content" type="button">{{ element.content }}</button>
+        }
+        @case ('image') {
+          <img [src]="element.content" alt="Image" class="image-content" />
+        }
+        @case ('container') {
+          <div class="container-content">
+            {{ element.children && element.children.length > 0 ? '' : 'Container vide' }}
+          </div>
+        }
+      }
+
+      @if (isSelected(element.id)) {
+        <div class="selection-handles">
+          <div class="handle top-left"></div>
+          <div class="handle top-right"></div>
+          <div class="handle bottom-left"></div>
+          <div class="handle bottom-right"></div>
+        </div>
+      }
+    </div>
+  }
+</div>

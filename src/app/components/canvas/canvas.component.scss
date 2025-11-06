@@ -1,0 +1,128 @@
+.canvas-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  overflow: auto;
+  min-height: 600px;
+}
+
+.canvas-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #999;
+  pointer-events: none;
+  font-size: 18px;
+
+  p {
+    margin: 0;
+  }
+}
+
+.builder-element {
+  cursor: move;
+  transition: box-shadow 0.2s;
+  box-sizing: border-box;
+
+  &:hover {
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
+  }
+
+  &.selected {
+    box-shadow: 0 0 0 2px #007bff !important;
+    z-index: 1000;
+  }
+
+  &.element-text {
+    .text-content {
+      width: 100%;
+      height: 100%;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  }
+
+  &.element-button {
+    .button-content {
+      width: 100%;
+      height: 100%;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      pointer-events: none;
+    }
+  }
+
+  &.element-image {
+    .image-content {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &.element-container {
+    .container-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+    }
+  }
+}
+
+.selection-handles {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  pointer-events: none;
+
+  .handle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #ffffff;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+
+    &.top-left {
+      top: 0;
+      left: 0;
+    }
+
+    &.top-right {
+      top: 0;
+      right: 0;
+    }
+
+    &.bottom-left {
+      bottom: 0;
+      left: 0;
+    }
+
+    &.bottom-right {
+      bottom: 0;
+      right: 0;
+    }
+  }
+}
+
+.cdk-drag-preview {
+  opacity: 0.8;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

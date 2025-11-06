@@ -1,0 +1,38 @@
+<div class="toolbar">
+  <div class="toolbar-section">
+    <h3>Composants</h3>
+    <div class="component-list">
+      @for (template of componentTemplates; track template.type) {
+        <div class="component-item"
+             draggable="true"
+             (dragstart)="onDragStart($event, template)">
+          <span class="component-icon">{{ template.icon }}</span>
+          <span class="component-label">{{ template.label }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="toolbar-section">
+    <h3>Actions</h3>
+    <div class="action-buttons">
+      <button class="action-button" (click)="clearCanvas()">
+        🗑️ Effacer
+      </button>
+      <button class="action-button" (click)="saveDesign()">
+        💾 Sauvegarder
+      </button>
+      <button class="action-button" (click)="triggerFileInput()">
+        📂 Charger
+      </button>
+      <button class="action-button" (click)="exportHTML()">
+        📤 Export HTML
+      </button>
+      <input type="file"
+             id="file-input"
+             accept=".json"
+             (change)="loadDesign($event)"
+             style="display: none;">
+    </div>
+  </div>
+</div>
