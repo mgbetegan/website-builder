@@ -1,14 +1,39 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject, Observable, Subject, debounceTime } from 'rxjs';
 import { BuilderElement, ComponentTemplate } from '../models/builder-element.model';
+import { ApiService, Project } from './api.service';
+
+export enum SaveStatus {
+  SAVED = 'saved',
+  SAVING = 'saving',
+  UNSAVED = 'unsaved',
+  ERROR = 'error'
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class BuilderService {
+  private apiService = inject(ApiService);
+
   private elements$ = new BehaviorSubject<BuilderElement[]>([]);
   private selectedElement$ = new BehaviorSubject<BuilderElement | null>(null);
+  private saveStatus$ = new BehaviorSubject<SaveStatus>(SaveStatus.SAVED);
+  private currentProject$ = new BehaviorSubject<Project | null>(null);
+
   private nextId = 1;
+  private autoSaveSubject$ = new Subject<void>();
+  private autoSaveEnabled = true;
+  private readonly AUTO_SAVE_DELAY = 2000; // 2 seconds
+
+  constructor() {
+    // Setup auto-save with debounce
+    this.autoSaveSubject$.pipe(
+      debounceTime(this.AUTO_SAVE_DELAY)
+    ).subscribe(() => {
+      this.performAutoSave();
+    });
+  }
 
   readonly componentTemplates: ComponentTemplate[] = [
     // Basic components
@@ -472,5 +497,199 @@ export class BuilderService {
     }
 
     return html;
+  }
+
+  // API Integration Methods
+
+  getSaveStatus(): Observable<SaveStatus> {
+    return this.saveStatus$.asObservable();
+  }
+
+  getCurrentProject(): Observable<Project | null> {
+    return this.currentProject$.asObservable();
+  }
+
+  private triggerAutoSave(): void {
+    if (this.autoSaveEnabled && this.currentProject$.value) {
+      this.saveStatus$.next(SaveStatus.UNSAVED);
+      this.autoSaveSubject$.next();
+    }
+  }
+
+  private async performAutoSave(): Promise<void> {
+    const project = this.currentProject$.value;
+    if (!project || !project.id) {
+      return;
+    }
+
+    try {
+      this.saveStatus$.next(SaveStatus.SAVING);
+      const elements = this.elements$.value;
+
+      await this.apiService.autoSave(project.id, elements).toPromise();
+
+      this.saveStatus$.next(SaveStatus.SAVED);
+      console.log('Auto-saved successfully');
+    } catch (error) {
+      console.error('Auto-save failed:', error);
+      this.saveStatus$.next(SaveStatus.ERROR);
+    }
+  }
+
+  // Override methods to trigger auto-save
+  override_addElement(template: ComponentTemplate, position?: { x: number; y: number }): BuilderElement {
+    const element = this.addElement(template, position);
+    this.triggerAutoSave();
+    return element;
+  }
+
+  override_updateElement(elementId: string, updates: Partial<BuilderElement>): void {
+    this.updateElement(elementId, updates);
+    this.triggerAutoSave();
+  }
+
+  override_updateElementStyles(elementId: string, styles: Partial<BuilderElement['styles']>): void {
+    this.updateElementStyles(elementId, styles);
+    this.triggerAutoSave();
+  }
+
+  override_updateFormAttributes(elementId: string, attributes: Partial<BuilderElement['formAttributes']>): void {
+    this.updateFormAttributes(elementId, attributes);
+    this.triggerAutoSave();
+  }
+
+  override_deleteElement(elementId: string): void {
+    this.deleteElement(elementId);
+    this.triggerAutoSave();
+  }
+
+  // Project Management
+
+  async createNewProject(name: string, description: string = ''): Promise<Project> {
+    try {
+      const project = await this.apiService.createProject({
+        name,
+        description,
+        elements: []
+      }).toPromise();
+
+      if (project) {
+        this.currentProject$.next(project);
+        this.elements$.next([]);
+        this.saveStatus$.next(SaveStatus.SAVED);
+        return project;
+      }
+      throw new Error('Failed to create project');
+    } catch (error) {
+      console.error('Error creating project:', error);
+      throw error;
+    }
+  }
+
+  async loadProject(id: string): Promise<void> {
+    try {
+      const project = await this.apiService.getProject(id).toPromise();
+
+      if (project) {
+        this.currentProject$.next(project);
+        this.elements$.next(project.elements || []);
+        this.selectedElement$.next(null);
+        this.saveStatus$.next(SaveStatus.SAVED);
+      }
+    } catch (error) {
+      console.error('Error loading project:', error);
+      throw error;
+    }
+  }
+
+  async getAllProjects(): Promise<Project[]> {
+    try {
+      return await this.apiService.getAllProjects().toPromise() || [];
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      return [];
+    }
+  }
+
+  async updateProjectInfo(name: string, description: string): Promise<void> {
+    const project = this.currentProject$.value;
+    if (!project || !project.id) {
+      throw new Error('No project loaded');
+    }
+
+    try {
+      const updated = await this.apiService.updateProject(project.id, { name, description }).toPromise();
+      if (updated) {
+        this.currentProject$.next(updated);
+      }
+    } catch (error) {
+      console.error('Error updating project info:', error);
+      throw error;
+    }
+  }
+
+  async deleteCurrentProject(): Promise<void> {
+    const project = this.currentProject$.value;
+    if (!project || !project.id) {
+      throw new Error('No project loaded');
+    }
+
+    try {
+      await this.apiService.deleteProject(project.id).toPromise();
+      this.currentProject$.next(null);
+      this.elements$.next([]);
+      this.selectedElement$.next(null);
+      this.saveStatus$.next(SaveStatus.SAVED);
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      throw error;
+    }
+  }
+
+  async exportHTMLFromAPI(): Promise<void> {
+    const project = this.currentProject$.value;
+    if (!project || !project.id) {
+      throw new Error('No project loaded');
+    }
+
+    try {
+      const blob = await this.apiService.exportHTML(project.id).toPromise();
+      if (blob) {
+        this.downloadBlob(blob, `${project.name}.html`, 'text/html');
+      }
+    } catch (error) {
+      console.error('Error exporting HTML:', error);
+      throw error;
+    }
+  }
+
+  async generateAngularProject(): Promise<void> {
+    const project = this.currentProject$.value;
+    if (!project || !project.id) {
+      throw new Error('No project loaded');
+    }
+
+    try {
+      const blob = await this.apiService.generateAngularProject(project.id).toPromise();
+      if (blob) {
+        this.downloadBlob(blob, `${project.name}.zip`, 'application/zip');
+      }
+    } catch (error) {
+      console.error('Error generating Angular project:', error);
+      throw error;
+    }
+  }
+
+  private downloadBlob(blob: Blob, filename: string, mimeType: string): void {
+    const url = window.URL.createObjectURL(new Blob([blob], { type: mimeType }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  setAutoSaveEnabled(enabled: boolean): void {
+    this.autoSaveEnabled = enabled;
   }
 }

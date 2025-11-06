@@ -1,7 +1,16 @@
 <div class="app-container">
   <header class="app-header">
-    <h1>{{ title }}</h1>
-    <p>Créez votre site web en glissant-déposant des composants</p>
+    <div class="header-left">
+      <h1>{{ title }}</h1>
+      @if (currentProject) {
+        <p class="project-name">{{ currentProject.name }}</p>
+      }
+    </div>
+    <div class="header-right">
+      <div class="save-status" [ngClass]="saveStatusClass">
+        <span class="status-text">{{ saveStatusText }}</span>
+      </div>
+    </div>
   </header>
 
   <div class="app-content">
