@@ -1,6 +1,8 @@
 node_modules/
 data/
 generated-projects/
+generated-documents/
+uploads/
 *.log
 .env
 .DS_Store

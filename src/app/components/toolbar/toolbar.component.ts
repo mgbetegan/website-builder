@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BuilderService } from '../../services/builder.service';
+import { ViewService, ViewMode } from '../../services/view.service';
 import { ComponentTemplate } from '../../models/builder-element.model';
 
 @Component({
@@ -13,7 +14,10 @@ import { ComponentTemplate } from '../../models/builder-element.model';
 export class ToolbarComponent {
   componentTemplates: ComponentTemplate[];
 
-  constructor(public builderService: BuilderService) {
+  constructor(
+    public builderService: BuilderService,
+    private viewService: ViewService
+  ) {
     this.componentTemplates = builderService.componentTemplates;
   }
 
@@ -77,5 +81,9 @@ export class ToolbarComponent {
   triggerFileInput(): void {
     const fileInput = document.getElementById('file-input') as HTMLInputElement;
     fileInput?.click();
+  }
+
+  openGuestBook(): void {
+    this.viewService.setView(ViewMode.GUESTBOOK);
   }
 }

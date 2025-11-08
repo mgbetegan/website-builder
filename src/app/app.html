@@ -14,16 +14,27 @@
   </header>
 
   <div class="app-content">
-    <aside class="sidebar left">
-      <app-toolbar></app-toolbar>
-    </aside>
+    @if (currentView === ViewMode.BUILDER) {
+      <aside class="sidebar left">
+        <app-toolbar></app-toolbar>
+      </aside>
 
-    <main class="main-canvas">
-      <app-canvas></app-canvas>
-    </main>
+      <main class="main-canvas">
+        <app-canvas></app-canvas>
+      </main>
 
-    <aside class="sidebar right">
-      <app-properties-panel></app-properties-panel>
-    </aside>
+      <aside class="sidebar right">
+        <app-properties-panel></app-properties-panel>
+      </aside>
+    } @else if (currentView === ViewMode.GUESTBOOK) {
+      <div class="guestbook-view">
+        <div class="guestbook-header-toolbar">
+          <button class="btn-back" (click)="viewService.setView(ViewMode.BUILDER)">
+            ← Retour au Builder
+          </button>
+        </div>
+        <app-guestbook></app-guestbook>
+      </div>
+    }
   </div>
 </div>

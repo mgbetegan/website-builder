@@ -1,0 +1,154 @@
+<div class="guestbook-container">
+  <div class="guestbook-header">
+    <h2>📖 Livres d'Or</h2>
+    <button class="btn-primary" (click)="showCreateForm = !showCreateForm">
+      + Nouveau
+    </button>
+  </div>
+
+  @if (showCreateForm) {
+    <div class="create-form">
+      <h3>Créer un livre d'or</h3>
+      <input type="text"
+             [(ngModel)]="newGuestBookName"
+             placeholder="Nom du livre d'or"
+             class="input-field">
+      <div class="form-actions">
+        <button class="btn-success" (click)="createGuestBook()">Créer</button>
+        <button class="btn-cancel" (click)="showCreateForm = false">Annuler</button>
+      </div>
+    </div>
+  }
+
+  <div class="guestbook-content">
+    <!-- List of guest books -->
+    <div class="guestbook-list">
+      <h3>Mes livres d'or</h3>
+      @if (guestBooks.length === 0) {
+        <p class="empty-message">Aucun livre d'or. Créez-en un !</p>
+      }
+      @for (gb of guestBooks; track gb.id) {
+        <div class="guestbook-item"
+             [class.selected]="selectedGuestBook?.id === gb.id"
+             (click)="selectGuestBook(gb)">
+          <div class="gb-info">
+            <strong>{{ gb.name }}</strong>
+            <small>{{ gb.entries.length }} entrées</small>
+            @if (gb.templateOriginalName) {
+              <small class="template-name">📄 {{ gb.templateOriginalName }}</small>
+            }
+          </div>
+          <button class="btn-delete" (click)="deleteGuestBook(gb); $event.stopPropagation()">
+            🗑️
+          </button>
+        </div>
+      }
+    </div>
+
+    <!-- Details panel -->
+    @if (selectedGuestBook) {
+      <div class="guestbook-details">
+        <h3>{{ selectedGuestBook.name }}</h3>
+
+        <!-- Template upload section -->
+        <div class="section">
+          <h4>1. Template DOCX</h4>
+          @if (selectedGuestBook.templateOriginalName) {
+            <p class="success-message">✓ Template: {{ selectedGuestBook.templateOriginalName }}</p>
+            @if (selectedGuestBook.fields && selectedGuestBook.fields.length > 0) {
+              <p class="info-message">
+                Champs détectés: {{ selectedGuestBook.fields.join(', ') }}
+              </p>
+            }
+          } @else {
+            <p class="warning-message">⚠️ Aucun template uploadé</p>
+          }
+
+          <div class="upload-section">
+            <input type="file"
+                   accept=".docx"
+                   (change)="onFileSelected($event)"
+                   id="template-upload"
+                   style="display: none;">
+            <label for="template-upload" class="btn-secondary">
+              Choisir un fichier .docx
+            </label>
+            @if (selectedFile) {
+              <span class="file-name">{{ selectedFile.name }}</span>
+              <button class="btn-primary" (click)="uploadTemplate()">
+                Uploader
+              </button>
+            }
+          </div>
+
+          <a href="backend/GUESTBOOK_TEMPLATE_GUIDE.md" target="_blank" class="help-link">
+            📚 Guide de création de templates
+          </a>
+        </div>
+
+        <!-- Entries section -->
+        <div class="section">
+          <h4>2. Entrées ({{ selectedGuestBook.entries.length }})</h4>
+
+          @if (selectedGuestBook.templatePath) {
+            <button class="btn-primary" (click)="showEntryForm = !showEntryForm">
+              + Ajouter une entrée
+            </button>
+
+            @if (showEntryForm && selectedGuestBook.fields.length > 0) {
+              <div class="entry-form">
+                <h5>Nouvelle entrée</h5>
+                @for (field of selectedGuestBook.fields; track field) {
+                  @if (!field.startsWith('guestbook_') && !field.startsWith('total_') && !field.startsWith('date') && field !== 'entries') {
+                    <div class="form-group">
+                      <label>{{ getFieldLabel(field) }}</label>
+                      <input type="text"
+                             [(ngModel)]="entryData[field]"
+                             class="input-field"
+                             placeholder="Entrez {{ getFieldLabel(field).toLowerCase() }}">
+                    </div>
+                  }
+                }
+                <div class="form-actions">
+                  <button class="btn-success" (click)="addEntry()">Ajouter</button>
+                  <button class="btn-cancel" (click)="showEntryForm = false">Annuler</button>
+                </div>
+              </div>
+            }
+
+            @if (selectedGuestBook.entries.length > 0) {
+              <div class="entries-list">
+                @for (entry of selectedGuestBook.entries; track entry.id) {
+                  <div class="entry-item">
+                    @for (key of Object.keys(entry.data); track key) {
+                      <div class="entry-field">
+                        <strong>{{ getFieldLabel(key) }}:</strong> {{ entry.data[key] }}
+                      </div>
+                    }
+                    <small class="entry-date">{{ entry.createdAt | date:'short' }}</small>
+                  </div>
+                }
+              </div>
+            }
+          } @else {
+            <p class="info-message">Uploadez d'abord un template pour ajouter des entrées</p>
+          }
+        </div>
+
+        <!-- Generate section -->
+        <div class="section">
+          <h4>3. Générer le document</h4>
+          <button class="btn-generate"
+                  [disabled]="!selectedGuestBook.templatePath || selectedGuestBook.entries.length === 0"
+                  (click)="generateDocument()">
+            📥 Télécharger le livre d'or (DOCX)
+          </button>
+        </div>
+      </div>
+    } @else {
+      <div class="no-selection">
+        <p>Sélectionnez un livre d'or pour voir les détails</p>
+      </div>
+    }
+  </div>
+</div>

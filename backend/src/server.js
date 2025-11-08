@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const projectRoutes = require('./routes/project.routes');
+const guestBookRoutes = require('./routes/guestbook.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +20,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/projects', projectRoutes);
+app.use('/api/guestbooks', guestBookRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -35,6 +37,7 @@ app.get('/', (req, res) => {
     version: '1.0.0',
     endpoints: {
       projects: '/api/projects',
+      guestbooks: '/api/guestbooks',
       health: '/health'
     }
   });
