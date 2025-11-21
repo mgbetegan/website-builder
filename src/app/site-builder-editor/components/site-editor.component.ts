@@ -2,6 +2,7 @@
 // Manages the 3 panels and handles auto-save
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, combineLatest } from 'rxjs';
 import { takeUntil, debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
@@ -11,8 +12,20 @@ import { SiteService } from '../services/site.service';
 import { TemplateService } from '../services/template.service';
 import { Site, Template, EditorState } from '../models';
 
+// Import panel components
+import { EditorLeftPanelComponent } from './editor-left-panel.component';
+import { EditorCenterPanelComponent } from './editor-center-panel.component';
+import { EditorRightPanelComponent } from './editor-right-panel.component';
+
 @Component({
   selector: 'app-site-editor',
+  standalone: true,
+  imports: [
+    CommonModule,
+    EditorLeftPanelComponent,
+    EditorCenterPanelComponent,
+    EditorRightPanelComponent
+  ],
   templateUrl: './site-editor.component.html',
   styleUrls: ['./site-editor.component.scss']
 })

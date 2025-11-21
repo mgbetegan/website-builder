@@ -1,14 +1,18 @@
 // 👁️ CENTER PANEL - Live Preview
 
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Subject, combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EditorStateService } from '../services/editor-state.service';
 import { TemplateMergeService } from '../services/template-merge.service';
 import { Site, Template, MergedSite, Theme, CoupleData } from '../models';
+import { BlockRendererComponent } from './block-renderer.component';
 
 @Component({
   selector: 'app-editor-center-panel',
+  standalone: true,
+  imports: [CommonModule, BlockRendererComponent],
   templateUrl: './editor-center-panel.component.html',
   styleUrls: ['./editor-center-panel.component.scss']
 })

@@ -1,6 +1,8 @@
 // 📝 LEFT PANEL - Form for editing couple data
 
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EditorStateService } from '../services/editor-state.service';
@@ -8,6 +10,8 @@ import { Site, Template, CoupleData, FAQ, FieldDefinition } from '../models';
 
 @Component({
   selector: 'app-editor-left-panel',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './editor-left-panel.component.html',
   styleUrls: ['./editor-left-panel.component.scss']
 })

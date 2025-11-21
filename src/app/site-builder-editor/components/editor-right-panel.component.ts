@@ -1,6 +1,8 @@
 // 🎨 RIGHT PANEL - Theme customization and block structure
 
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EditorStateService } from '../services/editor-state.service';
@@ -8,6 +10,8 @@ import { Template, Theme, Block } from '../models';
 
 @Component({
   selector: 'app-editor-right-panel',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './editor-right-panel.component.html',
   styleUrls: ['./editor-right-panel.component.scss']
 })
