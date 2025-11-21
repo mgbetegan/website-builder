@@ -755,13 +755,47 @@ export class EditorStateService {
   /**
    * Add a block to the current template (v1 mode)
    */
-  addBlockToTemplate(block: Block): void {
+  addBlockToTemplate(block: Block, index?: number): void {
     const currentState = this.stateSubject.value;
     if (!currentState.currentTemplate) return;
 
+    const structure = [...currentState.currentTemplate.structure];
+
+    // If index is provided, insert at that position, otherwise append
+    if (index !== undefined && index >= 0 && index <= structure.length) {
+      structure.splice(index, 0, block);
+    } else {
+      structure.push(block);
+    }
+
     const updatedTemplate: Template = {
       ...currentState.currentTemplate,
-      structure: [...currentState.currentTemplate.structure, block]
+      structure
+    };
+
+    this.stateSubject.next({
+      ...currentState,
+      currentTemplate: updatedTemplate,
+      isDirty: true
+    });
+  }
+
+  /**
+   * Reorder blocks in the current template
+   */
+  reorderBlocks(previousIndex: number, currentIndex: number): void {
+    const currentState = this.stateSubject.value;
+    if (!currentState.currentTemplate) return;
+
+    const structure = [...currentState.currentTemplate.structure];
+
+    // Move the block from previousIndex to currentIndex
+    const [movedBlock] = structure.splice(previousIndex, 1);
+    structure.splice(currentIndex, 0, movedBlock);
+
+    const updatedTemplate: Template = {
+      ...currentState.currentTemplate,
+      structure
     };
 
     this.stateSubject.next({

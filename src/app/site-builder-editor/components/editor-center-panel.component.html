@@ -34,6 +34,7 @@
       <div class="preview-content"
            *ngIf="!isRendering && mergedSite"
            cdkDropList
+           [cdkDropListData]="mergedSite.structure"
            (cdkDropListDropped)="onBlockDrop($event)">
         <div class="site-preview" [style.--primary]="mergedSite.theme.colors.primary"
                                     [style.--secondary]="mergedSite.theme.colors.secondary"
@@ -42,11 +43,18 @@
                                     [style.--font-heading]="mergedSite.theme.fonts.heading"
                                     [style.--font-body]="mergedSite.theme.fonts.body">
           <!-- Render each block using BlockRenderer -->
-          <app-block-renderer
-            *ngFor="let block of mergedSite.structure"
-            [block]="block"
-            [theme]="mergedSite.theme">
-          </app-block-renderer>
+          <div *ngFor="let block of mergedSite.structure; let i = index"
+               class="block-wrapper"
+               cdkDrag
+               [cdkDragData]="block">
+            <div class="drag-handle" cdkDragHandle title="Glisser pour réorganiser">
+              <span class="drag-icon">⋮⋮</span>
+            </div>
+            <app-block-renderer
+              [block]="block"
+              [theme]="mergedSite.theme">
+            </app-block-renderer>
+          </div>
         </div>
       </div>
 

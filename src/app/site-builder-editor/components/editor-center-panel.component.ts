@@ -2,13 +2,13 @@
 
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DragDropModule, CdkDragDrop } from '@angular/cdk/drag-drop';
+import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subject, combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EditorStateService } from '../services/editor-state.service';
 import { TemplateMergeService } from '../services/template-merge.service';
 import { BlockLibraryService } from '../services/block-library.service';
-import { Site, Template, MergedSite, Theme, CoupleData, BlockTemplate } from '../models';
+import { Site, Template, MergedSite, Theme, CoupleData, BlockTemplate, Block } from '../models';
 import { BlockRendererComponent } from './block-renderer.component';
 
 @Component({
@@ -91,18 +91,34 @@ export class EditorCenterPanelComponent implements OnInit, OnDestroy {
   // DRAG & DROP
   // ========================
 
-  onBlockDrop(event: CdkDragDrop<BlockTemplate>): void {
-    const blockTemplate = event.item.data as BlockTemplate;
-    console.log('Block dropped:', blockTemplate);
+  onBlockDrop(event: CdkDragDrop<any>): void {
+    // Check if this is a reorder within the same list
+    if (event.previousContainer === event.container) {
+      // This is a reorder operation
+      console.log('Reordering block from', event.previousIndex, 'to', event.currentIndex);
 
-    // Create a new block from the template
-    const newBlock = this.blockLibraryService.createBlockFromTemplate(blockTemplate.type);
+      // Get the current structure
+      const structure = event.container.data as Block[];
 
-    // Add block to the template
-    this.editorStateService.addBlockToTemplate(newBlock);
+      // Reorder the blocks
+      this.editorStateService.reorderBlocks(event.previousIndex, event.currentIndex);
 
-    // Emit data changed to trigger save
-    this.dataChanged.emit();
+      // Emit data changed to trigger save
+      this.dataChanged.emit();
+    } else {
+      // This is adding a new block from the library
+      const blockTemplate = event.item.data as BlockTemplate;
+      console.log('Block dropped:', blockTemplate);
+
+      // Create a new block from the template
+      const newBlock = this.blockLibraryService.createBlockFromTemplate(blockTemplate.type);
+
+      // Add block to the template at the specified index
+      this.editorStateService.addBlockToTemplate(newBlock, event.currentIndex);
+
+      // Emit data changed to trigger save
+      this.dataChanged.emit();
+    }
   }
 
   // ========================
