@@ -3,12 +3,11 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
-import { BlockRendererComponent } from '../components/block-renderer.component';
 
 @Component({
   selector: 'app-faq-section-block',
   standalone: true,
-  imports: [CommonModule, BlockRendererComponent],
+  imports: [CommonModule],
   template: `
     <section class="faq-section">
       <div class="faq-container">
@@ -20,11 +19,9 @@ import { BlockRendererComponent } from '../components/block-renderer.component';
         </p>
 
         <div class="faq-list">
-          <app-block-renderer
-            *ngFor="let child of block.children"
-            [block]="child"
-            [theme]="theme">
-          </app-block-renderer>
+          <p *ngIf="!block.children || block.children.length === 0" [style.color]="theme.colors.text">
+            Aucune question pour le moment.
+          </p>
         </div>
       </div>
     </section>

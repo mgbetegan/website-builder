@@ -3,12 +3,11 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
-import { BlockRendererComponent } from '../components/block-renderer.component';
 
 @Component({
   selector: 'app-couple-section-block',
   standalone: true,
-  imports: [CommonModule, BlockRendererComponent],
+  imports: [CommonModule],
   template: `
     <section class="couple-section"
              [style.background-color]="block.properties.backgroundColor || theme.colors.background">
@@ -21,11 +20,9 @@ import { BlockRendererComponent } from '../components/block-renderer.component';
         </p>
 
         <div class="couple-content">
-          <app-block-renderer
-            *ngFor="let child of block.children"
-            [block]="child"
-            [theme]="theme">
-          </app-block-renderer>
+          <p *ngIf="block.properties.content" [style.color]="theme.colors.text">
+            {{ block.properties.content }}
+          </p>
         </div>
       </div>
     </section>

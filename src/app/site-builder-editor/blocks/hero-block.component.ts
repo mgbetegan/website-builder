@@ -3,12 +3,11 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
-import { BlockRendererComponent } from '../components/block-renderer.component';
 
 @Component({
   selector: 'app-hero-block',
   standalone: true,
-  imports: [CommonModule, BlockRendererComponent],
+  imports: [CommonModule],
   template: `
     <section class="hero"
              [style.background-image]="'url(' + block.properties.backgroundImage + ')'"
@@ -17,11 +16,12 @@ import { BlockRendererComponent } from '../components/block-renderer.component';
            [style.background-color]="block.properties.overlay?.color || 'rgba(0,0,0,0.3)'"
            [style.backdrop-filter]="block.properties.overlay?.blur ? 'blur(4px)' : 'none'">
         <div class="hero-content">
-          <app-block-renderer
-            *ngFor="let child of block.children"
-            [block]="child"
-            [theme]="theme">
-          </app-block-renderer>
+          <h1 *ngIf="block.properties.title" [style.color]="'white'">
+            {{ block.properties.title }}
+          </h1>
+          <p *ngIf="block.properties.subtitle" [style.color]="'white'">
+            {{ block.properties.subtitle }}
+          </p>
         </div>
       </div>
     </section>
