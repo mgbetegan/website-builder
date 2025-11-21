@@ -588,7 +588,7 @@ export class EditorStateService {
         const block = blocksMap.get(id);
         return block ? { ...block, order: index + 1 } : null;
       })
-      .filter((b): b is Block => b !== null);
+      .filter(b => b !== null) as Block[];
 
     this.updatePage(currentState.currentPage.id, { structure: reorderedBlocks });
   }

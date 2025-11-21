@@ -17,7 +17,7 @@ import { RSVPFormBlockComponent } from '../blocks/rsvp-form-block.component';
 import { TextSectionBlockComponent } from '../blocks/text-section-block.component';
 import { ButtonBlockComponent } from '../blocks/button-block.component';
 import { FormCustomBlockComponent } from '../blocks/form-custom-block.component';
-import { FaqCustomBlockComponent } from '../blocks/faq-custom-block.component';
+import { FAQCustomBlockComponent } from '../blocks/faq-custom-block.component';
 import { DividerBlockComponent } from '../blocks/divider-block.component';
 
 @Component({
@@ -37,7 +37,7 @@ import { DividerBlockComponent } from '../blocks/divider-block.component';
     TextSectionBlockComponent,
     ButtonBlockComponent,
     FormCustomBlockComponent,
-    FaqCustomBlockComponent,
+    FAQCustomBlockComponent,
     DividerBlockComponent
   ],
   templateUrl: './block-renderer.component.html',
