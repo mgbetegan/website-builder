@@ -753,6 +753,25 @@ export class EditorStateService {
   }
 
   /**
+   * Add a block to the current template (v1 mode)
+   */
+  addBlockToTemplate(block: Block): void {
+    const currentState = this.stateSubject.value;
+    if (!currentState.currentTemplate) return;
+
+    const updatedTemplate: Template = {
+      ...currentState.currentTemplate,
+      structure: [...currentState.currentTemplate.structure, block]
+    };
+
+    this.stateSubject.next({
+      ...currentState,
+      currentTemplate: updatedTemplate,
+      isDirty: true
+    });
+  }
+
+  /**
    * Reset v2 state
    */
   resetV2(): void {

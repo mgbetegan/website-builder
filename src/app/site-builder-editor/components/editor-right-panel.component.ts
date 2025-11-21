@@ -114,6 +114,7 @@ export class EditorRightPanelComponent implements OnInit, OnDestroy {
 
   getBlockIcon(blockType: string): string {
     const icons: Record<string, string> = {
+      // v1 blocks
       navigation: '🧭',
       hero: '🎯',
       invitation_card: '💌',
@@ -122,13 +123,20 @@ export class EditorRightPanelComponent implements OnInit, OnDestroy {
       person_bio: '👤',
       faq_section: '❓',
       accordion_item: '📋',
-      rsvp_form: '📝'
+      rsvp_form: '📝',
+      // v2+ blocks
+      text_section: '📝',
+      button: '🔘',
+      form_custom: '📋',
+      faq_custom: '❓',
+      divider: '➖'
     };
     return icons[blockType] || '📦';
   }
 
   getBlockLabel(blockType: string): string {
     const labels: Record<string, string> = {
+      // v1 blocks
       navigation: 'Navigation',
       hero: 'Hero Section',
       invitation_card: 'Carte d\'Invitation',
@@ -137,7 +145,13 @@ export class EditorRightPanelComponent implements OnInit, OnDestroy {
       person_bio: 'Bio Personne',
       faq_section: 'Section FAQ',
       accordion_item: 'Item FAQ',
-      rsvp_form: 'Formulaire RSVP'
+      rsvp_form: 'Formulaire RSVP',
+      // v2+ blocks
+      text_section: 'Section Texte',
+      button: 'Bouton',
+      form_custom: 'Formulaire Personnalisé',
+      faq_custom: 'FAQ Personnalisée',
+      divider: 'Séparateur'
     };
     return labels[blockType] || blockType;
   }
@@ -151,10 +165,11 @@ export class EditorRightPanelComponent implements OnInit, OnDestroy {
 
     // Create a new block from the template
     const newBlock = this.blockLibraryService.createBlockFromTemplate(blockTemplate.type);
-
-    // TODO: Add block to current page/template
-    // For now, just log it - will need to implement addBlock functionality in EditorStateService
     console.log('New block created:', newBlock);
+
+    // Add block to the current template
+    this.editorStateService.addBlockToTemplate(newBlock);
+    console.log('Block added to template structure');
 
     // Emit dataChanged to trigger save
     this.dataChanged.emit();
