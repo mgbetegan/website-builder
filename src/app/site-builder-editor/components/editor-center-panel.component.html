@@ -31,7 +31,10 @@
       </div>
 
       <!-- Preview Content -->
-      <div class="preview-content" *ngIf="!isRendering && mergedSite">
+      <div class="preview-content"
+           *ngIf="!isRendering && mergedSite"
+           cdkDropList
+           (cdkDropListDropped)="onBlockDrop($event)">
         <div class="site-preview" [style.--primary]="mergedSite.theme.colors.primary"
                                     [style.--secondary]="mergedSite.theme.colors.secondary"
                                     [style.--text]="mergedSite.theme.colors.text"
@@ -48,10 +51,13 @@
       </div>
 
       <!-- Empty State -->
-      <div class="preview-empty" *ngIf="!isRendering && !mergedSite">
+      <div class="preview-empty"
+           *ngIf="!isRendering && !mergedSite"
+           cdkDropList
+           (cdkDropListDropped)="onBlockDrop($event)">
         <div class="empty-icon">📄</div>
         <p>Aucun contenu à afficher</p>
-        <small>Commencez à remplir le formulaire pour voir l'aperçu</small>
+        <small>Glissez-déposez des blocs ici pour commencer</small>
       </div>
     </div>
   </div>

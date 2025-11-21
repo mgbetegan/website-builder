@@ -128,6 +128,13 @@
   gap: 0.5rem;
   padding: 2rem;
   text-align: center;
+  transition: all 0.2s;
+
+  &.cdk-drop-list-dragging {
+    background: rgba(33, 150, 243, 0.05);
+    border: 2px dashed #2196f3;
+    border-radius: 8px;
+  }
 
   .empty-icon {
     font-size: 3rem;
@@ -153,6 +160,14 @@
 
 .preview-content {
   width: 100%;
+  min-height: 400px;
+  transition: background-color 0.2s;
+
+  &.cdk-drop-list-dragging {
+    background: rgba(33, 150, 243, 0.05);
+    outline: 2px dashed #2196f3;
+    outline-offset: -2px;
+  }
 }
 
 .site-preview {

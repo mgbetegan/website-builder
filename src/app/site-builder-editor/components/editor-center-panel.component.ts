@@ -2,17 +2,19 @@
 
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DragDropModule, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Subject, combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EditorStateService } from '../services/editor-state.service';
 import { TemplateMergeService } from '../services/template-merge.service';
-import { Site, Template, MergedSite, Theme, CoupleData } from '../models';
+import { BlockLibraryService } from '../services/block-library.service';
+import { Site, Template, MergedSite, Theme, CoupleData, BlockTemplate } from '../models';
 import { BlockRendererComponent } from './block-renderer.component';
 
 @Component({
   selector: 'app-editor-center-panel',
   standalone: true,
-  imports: [CommonModule, BlockRendererComponent],
+  imports: [CommonModule, DragDropModule, BlockRendererComponent],
   templateUrl: './editor-center-panel.component.html',
   styleUrls: ['./editor-center-panel.component.scss']
 })
@@ -22,6 +24,7 @@ export class EditorCenterPanelComponent implements OnInit, OnDestroy {
   @Input() previewMode: 'desktop' | 'mobile' = 'desktop';
 
   @Output() previewModeChanged = new EventEmitter<'desktop' | 'mobile'>();
+  @Output() dataChanged = new EventEmitter<void>();
 
   mergedSite: MergedSite | null = null;
   isRendering = false;
@@ -30,7 +33,8 @@ export class EditorCenterPanelComponent implements OnInit, OnDestroy {
 
   constructor(
     private editorStateService: EditorStateService,
-    private templateMergeService: TemplateMergeService
+    private templateMergeService: TemplateMergeService,
+    private blockLibraryService: BlockLibraryService
   ) {}
 
   ngOnInit(): void {
@@ -81,6 +85,24 @@ export class EditorCenterPanelComponent implements OnInit, OnDestroy {
 
   switchPreviewMode(mode: 'desktop' | 'mobile'): void {
     this.previewModeChanged.emit(mode);
+  }
+
+  // ========================
+  // DRAG & DROP
+  // ========================
+
+  onBlockDrop(event: CdkDragDrop<BlockTemplate>): void {
+    const blockTemplate = event.item.data as BlockTemplate;
+    console.log('Block dropped:', blockTemplate);
+
+    // Create a new block from the template
+    const newBlock = this.blockLibraryService.createBlockFromTemplate(blockTemplate.type);
+
+    // Add block to the template
+    this.editorStateService.addBlockToTemplate(newBlock);
+
+    // Emit data changed to trigger save
+    this.dataChanged.emit();
   }
 
   // ========================

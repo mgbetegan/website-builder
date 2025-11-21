@@ -78,7 +78,8 @@
         [site]="editorState.currentSite"
         [template]="editorState.currentTemplate"
         [previewMode]="previewMode"
-        (previewModeChanged)="onPreviewModeChanged($event)">
+        (previewModeChanged)="onPreviewModeChanged($event)"
+        (dataChanged)="onDataChanged()">
       </app-editor-center-panel>
     </section>
 

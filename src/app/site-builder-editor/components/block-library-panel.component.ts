@@ -2,13 +2,14 @@
 
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DragDropModule, CdkDragStart } from '@angular/cdk/drag-drop';
 import { BlockLibraryService } from '../services/block-library.service';
 import { BlockTemplate, BlockType } from '../models';
 
 @Component({
   selector: 'app-block-library-panel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DragDropModule],
   template: `
     <div class="block-library-panel">
       <div class="panel-header">
@@ -23,6 +24,9 @@ import { BlockTemplate, BlockType } from '../models';
           <div
             *ngFor="let block of getBlocksByCategory(category)"
             class="block-item"
+            cdkDrag
+            [cdkDragData]="block"
+            (cdkDragStarted)="onDragStart($event)"
             (click)="onBlockClick(block)">
             <div class="block-icon">{{ block.icon }}</div>
             <div class="block-info">
@@ -34,7 +38,7 @@ import { BlockTemplate, BlockType } from '../models';
       </div>
 
       <div class="panel-footer">
-        <p class="help-text">💡 Cliquez sur un bloc pour l'ajouter à votre page</p>
+        <p class="help-text">💡 Glissez ou cliquez sur un bloc pour l'ajouter</p>
       </div>
     </div>
   `,
@@ -93,7 +97,7 @@ import { BlockTemplate, BlockType } from '../models';
       background: white;
       border: 2px solid #e0e0e0;
       border-radius: 8px;
-      cursor: pointer;
+      cursor: grab;
       transition: all 0.2s;
     }
 
@@ -101,6 +105,31 @@ import { BlockTemplate, BlockType } from '../models';
       border-color: #3b82f6;
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
       transform: translateY(-2px);
+    }
+
+    .block-item.cdk-drag-dragging {
+      opacity: 0.5;
+      cursor: grabbing;
+    }
+
+    .cdk-drag-preview {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: white;
+      border: 2px solid #3b82f6;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      cursor: grabbing;
+    }
+
+    .cdk-drag-placeholder {
+      opacity: 0;
+    }
+
+    .cdk-drag-animating {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
     }
 
     .block-icon {
@@ -180,5 +209,9 @@ export class BlockLibraryPanelComponent implements OnInit {
 
   onBlockClick(block: BlockTemplate): void {
     this.blockSelected.emit(block);
+  }
+
+  onDragStart(event: CdkDragStart): void {
+    console.log('Drag started:', event.source.data);
   }
 }
