@@ -828,15 +828,30 @@ export class EditorStateService {
   }
 
   /**
-   * Update a block's properties
+   * Update a block's properties (supports nested blocks)
    */
   updateBlock(updatedBlock: Block): void {
     const currentState = this.stateSubject.value;
     if (!currentState.currentTemplate) return;
 
-    const structure = currentState.currentTemplate.structure.map(block =>
-      block.id === updatedBlock.id ? updatedBlock : block
-    );
+    // Recursive function to update block at any depth
+    const updateBlockRecursively = (blocks: Block[]): Block[] => {
+      return blocks.map(block => {
+        if (block.id === updatedBlock.id) {
+          // Found the block to update
+          return updatedBlock;
+        } else if (block.children && block.children.length > 0) {
+          // Search in children
+          return {
+            ...block,
+            children: updateBlockRecursively(block.children)
+          };
+        }
+        return block;
+      });
+    };
+
+    const structure = updateBlockRecursively(currentState.currentTemplate.structure);
 
     const updatedTemplate: Template = {
       ...currentState.currentTemplate,

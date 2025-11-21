@@ -3,11 +3,12 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
+import { PersonBioBlockComponent } from './person-bio-block.component';
 
 @Component({
   selector: 'app-couple-section-block',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PersonBioBlockComponent],
   template: `
     <section class="couple-section"
              [style.background-color]="block.properties.backgroundColor || theme.colors.background">
@@ -23,6 +24,15 @@ import { Block, Theme } from '../models';
           <p *ngIf="block.properties.content" [style.color]="theme.colors.text">
             {{ block.properties.content }}
           </p>
+
+          <!-- Render child blocks (typically person_bio blocks) -->
+          <div class="couple-children" *ngIf="block.children && block.children.length > 0">
+            <app-person-bio-block
+              *ngFor="let child of block.children"
+              [block]="child"
+              [theme]="theme">
+            </app-person-bio-block>
+          </div>
         </div>
       </div>
     </section>
@@ -57,6 +67,13 @@ import { Block, Theme } from '../models';
       gap: 3rem;
     }
 
+    .couple-children {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+      margin-top: 2rem;
+    }
+
     @media (max-width: 768px) {
       .section-title {
         font-size: 2rem;
@@ -64,6 +81,11 @@ import { Block, Theme } from '../models';
 
       .section-subtitle {
         font-size: 1rem;
+      }
+
+      .couple-children {
+        grid-template-columns: 1fr;
+        gap: 2rem;
       }
     }
   `]

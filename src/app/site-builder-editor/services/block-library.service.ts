@@ -276,9 +276,7 @@ export class BlockLibraryService {
   canHaveChildren(blockType: BlockType): boolean {
     const containerBlocks: BlockType[] = [
       'couple_section',
-      'faq_section',
-      'grid',
-      'columns'
+      'faq_section'
     ];
     return containerBlocks.includes(blockType);
   }
