@@ -3,13 +3,15 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Block } from '../models';
+import { Block, BlockTemplate } from '../models';
 import { ImageUploadComponent } from './image-upload.component';
+import { BlockLibraryService } from '../services/block-library.service';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-block-editor-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, ImageUploadComponent],
+  imports: [CommonModule, FormsModule, ImageUploadComponent, DragDropModule],
   template: `
     <div class="modal-backdrop" (click)="close()" *ngIf="block">
       <div class="modal-content" (click)="$event.stopPropagation()">
@@ -85,6 +87,41 @@ import { ImageUploadComponent } from './image-upload.component';
                 [(ngModel)]="block.properties[prop.key]"
                 class="form-color"
               />
+            </div>
+          </div>
+
+          <!-- Children Editor for Container Blocks -->
+          <div class="children-editor" *ngIf="canHaveChildren()">
+            <h4>📦 Éléments Enfants</h4>
+
+            <div class="children-list"
+                 cdkDropList
+                 [id]="'children-drop-' + block.id"
+                 [cdkDropListConnectedTo]="['block-library-list']"
+                 (cdkDropListDropped)="onChildBlockDrop($event)">
+              <div class="child-block" *ngFor="let child of block.children; let i = index">
+                <span class="child-icon">📄</span>
+                <span class="child-type">{{ child.type }}</span>
+                <button class="btn-remove-child"
+                        (click)="removeChild(i)"
+                        type="button"
+                        title="Supprimer">
+                  🗑️
+                </button>
+              </div>
+
+              <div class="drop-hint" *ngIf="!block.children || block.children.length === 0">
+                Glissez-déposez des blocs ici ou utilisez le bouton ci-dessous
+              </div>
+            </div>
+
+            <button class="btn-add-child" (click)="showAddChildDialog = !showAddChildDialog" type="button">
+              ➕ Ajouter un élément
+            </button>
+
+            <!-- Add Child Dialog -->
+            <div class="add-child-dialog" *ngIf="showAddChildDialog">
+              <p class="dialog-help">Glissez un bloc depuis la bibliothèque vers la zone ci-dessus</p>
             </div>
           </div>
         </div>
@@ -276,12 +313,117 @@ import { ImageUploadComponent } from './image-upload.component';
     .btn-primary:hover {
       background: #1976d2;
     }
+
+    .children-editor {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .children-editor h4 {
+      margin: 0 0 1rem 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .children-list {
+      min-height: 100px;
+      padding: 1rem;
+      border: 2px dashed #d0d0d0;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      transition: all 0.2s;
+    }
+
+    .children-list.cdk-drop-list-dragging {
+      background: rgba(33, 150, 243, 0.05);
+      border-color: #2196f3;
+    }
+
+    .child-block {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+    }
+
+    .child-icon {
+      font-size: 1.25rem;
+    }
+
+    .child-type {
+      flex: 1;
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .btn-remove-child {
+      padding: 0.25rem 0.5rem;
+      background: transparent;
+      border: none;
+      color: #dc3545;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .btn-remove-child:hover {
+      transform: scale(1.2);
+    }
+
+    .drop-hint {
+      text-align: center;
+      padding: 2rem;
+      color: #999;
+      font-size: 0.875rem;
+      font-style: italic;
+    }
+
+    .btn-add-child {
+      width: 100%;
+      padding: 0.75rem;
+      background: #e3f2fd;
+      border: 1px dashed #2196f3;
+      border-radius: 4px;
+      color: #2196f3;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-add-child:hover {
+      background: #bbdefb;
+    }
+
+    .add-child-dialog {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 4px;
+    }
+
+    .dialog-help {
+      margin: 0;
+      font-size: 0.875rem;
+      color: #856404;
+    }
   `]
 })
 export class BlockEditorModalComponent implements OnInit {
   @Input() block: Block | null = null;
   @Output() saved = new EventEmitter<Block>();
   @Output() closed = new EventEmitter<void>();
+
+  showAddChildDialog = false;
+
+  constructor(private blockLibraryService: BlockLibraryService) {}
 
   ngOnInit(): void {
     // Clone the block to avoid mutating the original during editing
@@ -327,6 +469,41 @@ export class BlockEditorModalComponent implements OnInit {
       .replace(/_/g, ' ')
       .replace(/^./, str => str.toUpperCase())
       .trim();
+  }
+
+  canHaveChildren(): boolean {
+    if (!this.block) return false;
+    return this.blockLibraryService.canHaveChildren(this.block.type);
+  }
+
+  onChildBlockDrop(event: any): void {
+    if (!this.block) return;
+
+    // Get the dropped block template
+    const blockTemplate = event.item.data as BlockTemplate;
+    console.log('Child block dropped:', blockTemplate);
+
+    // Create a new block from the template
+    const newBlock = this.blockLibraryService.createBlockFromTemplate(blockTemplate.type);
+
+    // Initialize children array if it doesn't exist
+    if (!this.block.children) {
+      this.block.children = [];
+    }
+
+    // Add the new block to children
+    this.block.children.push(newBlock);
+
+    // Close the add child dialog
+    this.showAddChildDialog = false;
+  }
+
+  removeChild(index: number): void {
+    if (!this.block || !this.block.children) return;
+
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
+      this.block.children.splice(index, 1);
+    }
   }
 
   save(): void {
