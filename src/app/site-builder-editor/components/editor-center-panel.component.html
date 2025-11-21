@@ -1,0 +1,58 @@
+<!-- 👁️ CENTER PANEL - Live Preview -->
+
+<div class="center-panel">
+  <!-- PREVIEW HEADER -->
+  <div class="preview-header">
+    <h3>Aperçu</h3>
+
+    <div class="preview-mode-toggle">
+      <button
+        class="mode-btn"
+        [class.active]="previewMode === 'desktop'"
+        (click)="switchPreviewMode('desktop')">
+        🖥️ Desktop
+      </button>
+      <button
+        class="mode-btn"
+        [class.active]="previewMode === 'mobile'"
+        (click)="switchPreviewMode('mobile')">
+        📱 Mobile
+      </button>
+    </div>
+  </div>
+
+  <!-- PREVIEW VIEWPORT -->
+  <div class="preview-container">
+    <div class="viewport" [ngClass]="viewportClass">
+      <!-- Loading State -->
+      <div class="preview-loading" *ngIf="isRendering">
+        <div class="spinner"></div>
+        <p>Rendu en cours...</p>
+      </div>
+
+      <!-- Preview Content -->
+      <div class="preview-content" *ngIf="!isRendering && mergedSite">
+        <div class="site-preview" [style.--primary]="mergedSite.theme.colors.primary"
+                                    [style.--secondary]="mergedSite.theme.colors.secondary"
+                                    [style.--text]="mergedSite.theme.colors.text"
+                                    [style.--background]="mergedSite.theme.colors.background"
+                                    [style.--font-heading]="mergedSite.theme.fonts.heading"
+                                    [style.--font-body]="mergedSite.theme.fonts.body">
+          <!-- Render each block using BlockRenderer -->
+          <app-block-renderer
+            *ngFor="let block of mergedSite.structure"
+            [block]="block"
+            [theme]="mergedSite.theme">
+          </app-block-renderer>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="preview-empty" *ngIf="!isRendering && !mergedSite">
+        <div class="empty-icon">📄</div>
+        <p>Aucun contenu à afficher</p>
+        <small>Commencez à remplir le formulaire pour voir l'aperçu</small>
+      </div>
+    </div>
+  </div>
+</div>

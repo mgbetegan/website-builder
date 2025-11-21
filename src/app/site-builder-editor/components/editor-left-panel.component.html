@@ -1,0 +1,147 @@
+<!-- 📝 LEFT PANEL - Form Editor -->
+
+<div class="left-panel">
+  <!-- TABS -->
+  <div class="panel-tabs">
+    <button
+      class="tab"
+      [class.active]="activeTab === 'content'"
+      (click)="switchTab('content')">
+      Contenu
+    </button>
+    <button
+      class="tab"
+      [class.active]="activeTab === 'design'"
+      (click)="switchTab('design')">
+      Design
+    </button>
+  </div>
+
+  <!-- CONTENT TAB -->
+  <div class="panel-content" *ngIf="activeTab === 'content'">
+    <div class="sections">
+      <div class="section" *ngFor="let sectionName of sectionNames">
+        <!-- Section Header -->
+        <div class="section-header" (click)="toggleSection(sectionName)">
+          <span class="section-title">{{ sectionName }}</span>
+          <span class="section-icon">
+            {{ isSectionExpanded(sectionName) ? '▼' : '▶' }}
+          </span>
+        </div>
+
+        <!-- Section Content -->
+        <div class="section-body" *ngIf="isSectionExpanded(sectionName)">
+          <div class="form-field" *ngFor="let field of fieldSections[sectionName]">
+            <!-- Text Input -->
+            <div *ngIf="field.type === 'text'">
+              <label [for]="field.name">
+                {{ field.label }}
+                <span class="required" *ngIf="field.required">*</span>
+              </label>
+              <input
+                [id]="field.name"
+                type="text"
+                [value]="coupleData[field.name] || ''"
+                (input)="updateField(field.name, $any($event.target).value)"
+                [placeholder]="field.placeholder || ''"
+              />
+              <small *ngIf="field.helpText">{{ field.helpText }}</small>
+            </div>
+
+            <!-- Textarea -->
+            <div *ngIf="field.type === 'textarea'">
+              <label [for]="field.name">
+                {{ field.label }}
+                <span class="required" *ngIf="field.required">*</span>
+              </label>
+              <textarea
+                [id]="field.name"
+                [value]="coupleData[field.name] || ''"
+                (input)="updateField(field.name, $any($event.target).value)"
+                [placeholder]="field.placeholder || ''"
+                rows="4">
+              </textarea>
+              <small *ngIf="field.helpText">{{ field.helpText }}</small>
+            </div>
+
+            <!-- Date Input -->
+            <div *ngIf="field.type === 'date'">
+              <label [for]="field.name">
+                {{ field.label }}
+                <span class="required" *ngIf="field.required">*</span>
+              </label>
+              <input
+                [id]="field.name"
+                type="date"
+                [value]="coupleData[field.name] || ''"
+                (input)="updateField(field.name, $any($event.target).value)"
+              />
+              <small *ngIf="field.helpText">{{ field.helpText }}</small>
+            </div>
+
+            <!-- Image Input -->
+            <div *ngIf="field.type === 'image'">
+              <label [for]="field.name">
+                {{ field.label }}
+                <span class="required" *ngIf="field.required">*</span>
+              </label>
+              <input
+                [id]="field.name"
+                type="url"
+                [value]="coupleData[field.name] || ''"
+                (input)="updateField(field.name, $any($event.target).value)"
+                placeholder="URL de l'image"
+              />
+              <small *ngIf="field.helpText">{{ field.helpText }}</small>
+              <div class="image-preview" *ngIf="coupleData[field.name]">
+                <img [src]="coupleData[field.name]" [alt]="field.label" />
+              </div>
+            </div>
+
+            <!-- FAQ List -->
+            <div *ngIf="field.type === 'faq_list'">
+              <label>
+                {{ field.label }}
+                <span class="required" *ngIf="field.required">*</span>
+              </label>
+
+              <div class="faq-list">
+                <div class="faq-item" *ngFor="let faq of coupleData.faqs; let i = index">
+                  <div class="faq-header">
+                    <span class="faq-number">FAQ #{{ i + 1 }}</span>
+                    <button class="btn-remove-faq" (click)="removeFAQ(i)">
+                      Supprimer
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    [value]="faq.question"
+                    (input)="updateFAQ(i, 'question', $any($event.target).value)"
+                    placeholder="Question"
+                  />
+                  <textarea
+                    [value]="faq.answer"
+                    (input)="updateFAQ(i, 'answer', $any($event.target).value)"
+                    placeholder="Réponse"
+                    rows="3">
+                  </textarea>
+                </div>
+
+                <button class="btn-add-faq" (click)="addFAQ()">
+                  + Ajouter une FAQ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESIGN TAB -->
+  <div class="panel-content" *ngIf="activeTab === 'design'">
+    <p class="info-text">
+      Utilisez le panneau de droite pour personnaliser les couleurs et les polices.
+    </p>
+  </div>
+</div>

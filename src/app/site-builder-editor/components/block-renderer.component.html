@@ -1,0 +1,71 @@
+<!-- 🔀 BLOCK RENDERER - Routes blocks to their components -->
+
+<ng-container [ngSwitch]="block.type">
+  <!-- Navigation Block -->
+  <app-navigation-block
+    *ngSwitchCase="'navigation'"
+    [block]="block"
+    [theme]="theme">
+  </app-navigation-block>
+
+  <!-- Hero Block -->
+  <app-hero-block
+    *ngSwitchCase="'hero'"
+    [block]="block"
+    [theme]="theme">
+  </app-hero-block>
+
+  <!-- Invitation Card Block -->
+  <app-invitation-card-block
+    *ngSwitchCase="'invitation_card'"
+    [block]="block"
+    [theme]="theme">
+  </app-invitation-card-block>
+
+  <!-- Countdown Block -->
+  <app-countdown-block
+    *ngSwitchCase="'countdown'"
+    [block]="block"
+    [theme]="theme">
+  </app-countdown-block>
+
+  <!-- Couple Section Block -->
+  <app-couple-section-block
+    *ngSwitchCase="'couple_section'"
+    [block]="block"
+    [theme]="theme">
+  </app-couple-section-block>
+
+  <!-- Person Bio Block -->
+  <app-person-bio-block
+    *ngSwitchCase="'person_bio'"
+    [block]="block"
+    [theme]="theme">
+  </app-person-bio-block>
+
+  <!-- FAQ Section Block -->
+  <app-faq-section-block
+    *ngSwitchCase="'faq_section'"
+    [block]="block"
+    [theme]="theme">
+  </app-faq-section-block>
+
+  <!-- Accordion Item Block -->
+  <app-accordion-item-block
+    *ngSwitchCase="'accordion_item'"
+    [block]="block"
+    [theme]="theme">
+  </app-accordion-item-block>
+
+  <!-- RSVP Form Block -->
+  <app-rsvp-form-block
+    *ngSwitchCase="'rsvp_form'"
+    [block]="block"
+    [theme]="theme">
+  </app-rsvp-form-block>
+
+  <!-- Unknown Block -->
+  <div *ngSwitchDefault class="unknown-block">
+    <p>⚠️ Type de bloc inconnu: {{ block.type }}</p>
+  </div>
+</ng-container>

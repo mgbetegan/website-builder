@@ -3,6 +3,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const projectRoutes = require('./routes/project.routes');
 const guestBookRoutes = require('./routes/guestbook.routes');
+const templateRoutes = require('./routes/template.routes');
+const siteRoutes = require('./routes/site.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,6 +23,8 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/projects', projectRoutes);
 app.use('/api/guestbooks', guestBookRoutes);
+app.use('/api/templates', templateRoutes);
+app.use('/api/sites', siteRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -38,6 +42,8 @@ app.get('/', (req, res) => {
     endpoints: {
       projects: '/api/projects',
       guestbooks: '/api/guestbooks',
+      templates: '/api/templates',
+      sites: '/api/sites',
       health: '/health'
     }
   });

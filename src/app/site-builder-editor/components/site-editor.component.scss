@@ -1,0 +1,295 @@
+// 🎨 SITE EDITOR STYLES
+
+.site-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+// ========================
+// HEADER
+// ========================
+
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.btn-back {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #f5f5f5;
+    border-color: #999;
+  }
+}
+
+.site-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2c2c2c;
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #e0e0e0;
+  color: #666;
+
+  &.published {
+    background: #4caf50;
+    color: white;
+  }
+}
+
+.save-status {
+  font-size: 0.875rem;
+  color: #666;
+
+  &.saved {
+    color: #4caf50;
+  }
+
+  &.unsaved {
+    color: #ff9800;
+  }
+}
+
+.btn-save,
+.btn-publish,
+.btn-unpublish {
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-save {
+  background: #2196f3;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: #1976d2;
+  }
+}
+
+.btn-publish {
+  background: #4caf50;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: #388e3c;
+  }
+}
+
+.btn-unpublish {
+  background: #ff9800;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: #f57c00;
+  }
+}
+
+// ========================
+// ERROR BANNER
+// ========================
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  background: #ffebee;
+  border-bottom: 1px solid #ef5350;
+  color: #c62828;
+
+  .error-icon {
+    font-size: 1.25rem;
+  }
+
+  .error-message {
+    flex: 1;
+    font-size: 0.9rem;
+  }
+
+  .btn-close-error {
+    padding: 0.25rem 0.5rem;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #c62828;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+// ========================
+// MAIN CONTENT - 3 PANELS
+// ========================
+
+.editor-content {
+  display: grid;
+  grid-template-columns: 320px 1fr 320px;
+  flex: 1;
+  overflow: hidden;
+  gap: 0;
+}
+
+.editor-panel {
+  background: white;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &.editor-panel-left,
+  &.editor-panel-right {
+    border-right: 1px solid #e0e0e0;
+  }
+
+  &.editor-panel-center {
+    background: #f5f5f5;
+  }
+}
+
+// ========================
+// LOADING STATE
+// ========================
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 1rem;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e0e0e0;
+    border-top-color: #2196f3;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    color: #666;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ========================
+// ERROR STATE
+// ========================
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 1rem;
+  padding: 2rem;
+  text-align: center;
+
+  .error-icon {
+    font-size: 4rem;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #c62828;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    color: #666;
+    max-width: 500px;
+  }
+
+  .btn-primary {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+
+    &:hover {
+      background: #1976d2;
+    }
+  }
+}
+
+// ========================
+// RESPONSIVE
+// ========================
+
+@media (max-width: 1400px) {
+  .editor-content {
+    grid-template-columns: 280px 1fr 280px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .editor-content {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-panel-left,
+  .editor-panel-right {
+    display: none;
+  }
+}

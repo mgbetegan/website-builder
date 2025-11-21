@@ -1,0 +1,240 @@
+// 🎨 RIGHT PANEL STYLES
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+}
+
+// ========================
+// TABS
+// ========================
+
+.panel-tabs {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fafafa;
+
+  .tab {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #f5f5f5;
+      color: #2c2c2c;
+    }
+
+    &.active {
+      color: #2196f3;
+      border-bottom-color: #2196f3;
+      background: white;
+    }
+  }
+}
+
+// ========================
+// CONTENT
+// ========================
+
+.panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+// ========================
+// INFO SECTION
+// ========================
+
+.info-section {
+  margin-bottom: 1.5rem;
+
+  h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2c2c2c;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #666;
+    line-height: 1.5;
+  }
+}
+
+// ========================
+// BLOCK TREE
+// ========================
+
+.block-tree {
+  display: flex;
+  flex-direction: column;
+}
+
+.block-node {
+  margin-bottom: 0.25rem;
+}
+
+.block-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: #f5f5f5;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #ebebeb;
+  }
+}
+
+.block-icon {
+  font-size: 1rem;
+}
+
+.block-label {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #2c2c2c;
+}
+
+.expand-icon {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.block-children {
+  margin-top: 0.25rem;
+  padding-left: 1rem;
+  border-left: 2px solid #e0e0e0;
+}
+
+// ========================
+// DESIGN SECTION
+// ========================
+
+.design-section {
+  margin-bottom: 2rem;
+
+  h4 {
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2c2c2c;
+  }
+}
+
+// ========================
+// COLOR PICKER
+// ========================
+
+.color-picker {
+  margin-bottom: 1.25rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #2c2c2c;
+  }
+}
+
+.color-input-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  input[type="color"] {
+    width: 50px;
+    height: 40px;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0;
+
+    &::-webkit-color-swatch-wrapper {
+      padding: 4px;
+    }
+
+    &::-webkit-color-swatch {
+      border: none;
+      border-radius: 2px;
+    }
+  }
+
+  .color-hex {
+    flex: 1;
+    padding: 0.625rem;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+
+    &:focus {
+      outline: none;
+      border-color: #2196f3;
+    }
+  }
+}
+
+// ========================
+// FONT PICKER
+// ========================
+
+.font-picker {
+  margin-bottom: 1.25rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #2c2c2c;
+  }
+
+  select {
+    width: 100%;
+    padding: 0.625rem;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-family: inherit;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: #2196f3;
+    }
+
+    option {
+      padding: 0.5rem;
+    }
+  }
+}

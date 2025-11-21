@@ -1,0 +1,113 @@
+<!-- 🎯 SITE EDITOR - Main container with 3 panels -->
+
+<div class="site-editor" *ngIf="!isLoading && !loadingError">
+  <!-- ======================== -->
+  <!-- HEADER -->
+  <!-- ======================== -->
+  <header class="editor-header">
+    <div class="header-left">
+      <button class="btn-back" (click)="goBack()">
+        ← Retour
+      </button>
+      <h1 class="site-title">{{ siteName }}</h1>
+      <span class="badge" [class.published]="isPublished">
+        {{ isPublished ? 'Publié' : 'Brouillon' }}
+      </span>
+    </div>
+
+    <div class="header-right">
+      <span class="save-status" *ngIf="isSaving">
+        💾 Sauvegarde...
+      </span>
+      <span class="save-status saved" *ngIf="!isSaving && !isDirty">
+        ✓ Sauvegardé
+      </span>
+      <span class="save-status unsaved" *ngIf="!isSaving && isDirty">
+        • Non sauvegardé
+      </span>
+
+      <button class="btn-save" (click)="saveSite()" [disabled]="isSaving || !isDirty">
+        Sauvegarder
+      </button>
+
+      <button
+        class="btn-publish"
+        *ngIf="!isPublished"
+        (click)="publishSite()"
+        [disabled]="isSaving">
+        Publier
+      </button>
+
+      <button
+        class="btn-unpublish"
+        *ngIf="isPublished"
+        (click)="unpublishSite()"
+        [disabled]="isSaving">
+        Dépublier
+      </button>
+    </div>
+  </header>
+
+  <!-- ======================== -->
+  <!-- ERROR BANNER -->
+  <!-- ======================== -->
+  <div class="error-banner" *ngIf="hasError">
+    <span class="error-icon">⚠️</span>
+    <span class="error-message">{{ errorMessage }}</span>
+    <button class="btn-close-error" (click)="editorStateService.clearError()">×</button>
+  </div>
+
+  <!-- ======================== -->
+  <!-- MAIN CONTENT - 3 PANELS -->
+  <!-- ======================== -->
+  <main class="editor-content">
+    <!-- LEFT PANEL - Form -->
+    <aside class="editor-panel editor-panel-left">
+      <app-editor-left-panel
+        [site]="editorState.currentSite"
+        [template]="editorState.currentTemplate"
+        [activeTab]="leftPanelTab"
+        (tabChanged)="onLeftPanelTabChanged($event)"
+        (dataChanged)="onDataChanged()">
+      </app-editor-left-panel>
+    </aside>
+
+    <!-- CENTER PANEL - Preview -->
+    <section class="editor-panel editor-panel-center">
+      <app-editor-center-panel
+        [site]="editorState.currentSite"
+        [template]="editorState.currentTemplate"
+        [previewMode]="previewMode"
+        (previewModeChanged)="onPreviewModeChanged($event)">
+      </app-editor-center-panel>
+    </section>
+
+    <!-- RIGHT PANEL - Theme -->
+    <aside class="editor-panel editor-panel-right">
+      <app-editor-right-panel
+        [template]="editorState.currentTemplate"
+        [activeTab]="rightPanelTab"
+        (tabChanged)="onRightPanelTabChanged($event)"
+        (dataChanged)="onDataChanged()">
+      </app-editor-right-panel>
+    </aside>
+  </main>
+</div>
+
+<!-- ======================== -->
+<!-- LOADING STATE -->
+<!-- ======================== -->
+<div class="loading-container" *ngIf="isLoading">
+  <div class="spinner"></div>
+  <p>Chargement de l'éditeur...</p>
+</div>
+
+<!-- ======================== -->
+<!-- ERROR STATE -->
+<!-- ======================== -->
+<div class="error-container" *ngIf="loadingError">
+  <div class="error-icon">⚠️</div>
+  <h2>Erreur</h2>
+  <p>{{ loadingError }}</p>
+  <button class="btn-primary" (click)="goBack()">Retour au dashboard</button>
+</div>

@@ -1,0 +1,160 @@
+<!-- 🎨 RIGHT PANEL - Theme & Structure -->
+
+<div class="right-panel">
+  <!-- TABS -->
+  <div class="panel-tabs">
+    <button
+      class="tab"
+      [class.active]="activeTab === 'blocks'"
+      (click)="switchTab('blocks')">
+      Blocs
+    </button>
+    <button
+      class="tab"
+      [class.active]="activeTab === 'design'"
+      (click)="switchTab('design')">
+      Design
+    </button>
+  </div>
+
+  <!-- BLOCKS TAB -->
+  <div class="panel-content" *ngIf="activeTab === 'blocks'">
+    <div class="info-section">
+      <h4>Structure du Site</h4>
+      <p>Voici la structure de votre site. Les blocs sont organisés hiérarchiquement.</p>
+    </div>
+
+    <div class="block-tree" *ngIf="template && template.structure">
+      <ng-container *ngFor="let block of template.structure">
+        <ng-container *ngTemplateOutlet="blockNode; context: { $implicit: block, depth: 0 }"></ng-container>
+      </ng-container>
+    </div>
+
+    <!-- Block Node Template -->
+    <ng-template #blockNode let-block let-depth="depth">
+      <div class="block-node" [style.padding-left.rem]="depth * 1">
+        <div class="block-header" (click)="toggleBlock(block.id)">
+          <span class="block-icon">{{ getBlockIcon(block.type) }}</span>
+          <span class="block-label">{{ getBlockLabel(block.type) }}</span>
+          <span class="expand-icon" *ngIf="hasChildren(block)">
+            {{ isBlockExpanded(block.id) ? '▼' : '▶' }}
+          </span>
+        </div>
+
+        <!-- Children -->
+        <div class="block-children" *ngIf="hasChildren(block) && isBlockExpanded(block.id)">
+          <ng-container *ngFor="let child of block.children">
+            <ng-container *ngTemplateOutlet="blockNode; context: { $implicit: child, depth: depth + 1 }"></ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- DESIGN TAB -->
+  <div class="panel-content" *ngIf="activeTab === 'design' && theme">
+    <div class="design-section">
+      <h4>🎨 Couleurs</h4>
+
+      <div class="color-picker">
+        <label for="color-primary">Couleur Primaire</label>
+        <div class="color-input-group">
+          <input
+            id="color-primary"
+            type="color"
+            [value]="theme.colors.primary"
+            (input)="updateColor('primary', $event)"
+          />
+          <input
+            type="text"
+            [value]="theme.colors.primary"
+            (input)="updateColor('primary', $event)"
+            class="color-hex"
+          />
+        </div>
+      </div>
+
+      <div class="color-picker">
+        <label for="color-secondary">Couleur Secondaire</label>
+        <div class="color-input-group">
+          <input
+            id="color-secondary"
+            type="color"
+            [value]="theme.colors.secondary"
+            (input)="updateColor('secondary', $event)"
+          />
+          <input
+            type="text"
+            [value]="theme.colors.secondary"
+            (input)="updateColor('secondary', $event)"
+            class="color-hex"
+          />
+        </div>
+      </div>
+
+      <div class="color-picker">
+        <label for="color-text">Couleur du Texte</label>
+        <div class="color-input-group">
+          <input
+            id="color-text"
+            type="color"
+            [value]="theme.colors.text"
+            (input)="updateColor('text', $event)"
+          />
+          <input
+            type="text"
+            [value]="theme.colors.text"
+            (input)="updateColor('text', $event)"
+            class="color-hex"
+          />
+        </div>
+      </div>
+
+      <div class="color-picker">
+        <label for="color-background">Couleur de Fond</label>
+        <div class="color-input-group">
+          <input
+            id="color-background"
+            type="color"
+            [value]="theme.colors.background"
+            (input)="updateColor('background', $event)"
+          />
+          <input
+            type="text"
+            [value]="theme.colors.background"
+            (input)="updateColor('background', $event)"
+            class="color-hex"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="design-section">
+      <h4>✍️ Polices</h4>
+
+      <div class="font-picker">
+        <label for="font-heading">Police des Titres</label>
+        <select
+          id="font-heading"
+          [value]="theme.fonts.heading"
+          (change)="updateFont('heading', $event)">
+          <option *ngFor="let font of fontOptions.heading" [value]="font">
+            {{ font.split(',')[0] }}
+          </option>
+        </select>
+      </div>
+
+      <div class="font-picker">
+        <label for="font-body">Police du Texte</label>
+        <select
+          id="font-body"
+          [value]="theme.fonts.body"
+          (change)="updateFont('body', $event)">
+          <option *ngFor="let font of fontOptions.body" [value]="font">
+            {{ font.split(',')[0] }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
