@@ -1,10 +1,14 @@
 // 🎯 HERO BLOCK
 
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
+import { BlockRendererComponent } from '../components/block-renderer.component';
 
 @Component({
   selector: 'app-hero-block',
+  standalone: true,
+  imports: [CommonModule, BlockRendererComponent],
   template: `
     <section class="hero"
              [style.background-image]="'url(' + block.properties.backgroundImage + ')'"

@@ -1,10 +1,13 @@
 // 📝 TEXT SECTION BLOCK (v2+ customizable)
 
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
 
 @Component({
   selector: 'app-text-section-block',
+  standalone: true,
+  imports: [CommonModule],
   template: `
     <section class="text-section"
              [style.background-color]="block.properties.backgroundColor || '#ffffff'"

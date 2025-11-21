@@ -1,9 +1,12 @@
 // ⏰ COUNTDOWN BLOCK
 
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule],
   selector: 'app-countdown-block',
   template: `
     <div class="countdown-section">

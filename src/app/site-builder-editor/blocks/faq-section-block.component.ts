@@ -1,10 +1,14 @@
 // ❓ FAQ SECTION BLOCK
 
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
+import { BlockRendererComponent } from '../components/block-renderer.component';
 
 @Component({
   selector: 'app-faq-section-block',
+  standalone: true,
+  imports: [CommonModule, BlockRendererComponent],
   template: `
     <section class="faq-section">
       <div class="faq-container">

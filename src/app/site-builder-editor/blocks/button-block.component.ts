@@ -1,11 +1,14 @@
 // 🔘 BUTTON BLOCK (v2+ customizable with page navigation)
 
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Block, Theme } from '../models';
 
 @Component({
   selector: 'app-button-block',
+  standalone: true,
+  imports: [CommonModule],
   template: `
     <div class="button-block">
       <button

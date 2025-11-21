@@ -1,9 +1,12 @@
 // 👤 PERSON BIO BLOCK
 
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule],
   selector: 'app-person-bio-block',
   template: `
     <div class="person-bio" [class.image-right]="block.properties.imagePosition === 'right'">

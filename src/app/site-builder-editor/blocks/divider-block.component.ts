@@ -1,10 +1,13 @@
 // ➖ DIVIDER BLOCK (v2+ simple separator)
 
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
 
 @Component({
   selector: 'app-divider-block',
+  standalone: true,
+  imports: [CommonModule],
   template: `
     <div class="divider-block"
          [style.margin-top]="block.properties.marginTop || '2rem'"

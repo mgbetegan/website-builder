@@ -1,9 +1,12 @@
 // 📋 ACCORDION ITEM BLOCK
 
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule],
   selector: 'app-accordion-item-block',
   template: `
     <div class="accordion-item">

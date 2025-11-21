@@ -1,10 +1,13 @@
 // ❓ FAQ CUSTOM BLOCK (v2+ customizable FAQs)
 
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Block, Theme, FAQItem } from '../models';
 
 @Component({
   selector: 'app-faq-custom-block',
+  standalone: true,
+  imports: [CommonModule],
   template: `
     <section class="faq-custom-section">
       <div class="faq-container">

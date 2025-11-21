@@ -1,10 +1,13 @@
 // 📋 FORM CUSTOM BLOCK (v2+ customizable forms)
 
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Block, Theme, FormField } from '../models';
 
 @Component({
   selector: 'app-form-custom-block',
+  standalone: true,
+  imports: [CommonModule],
   template: `
     <section class="form-custom-section">
       <div class="form-container">

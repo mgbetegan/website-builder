@@ -1,9 +1,12 @@
 // 🧭 NAVIGATION BLOCK
 
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule],
   selector: 'app-navigation-block',
   template: `
     <nav class="navigation" [style.background-color]="theme.colors.background">
