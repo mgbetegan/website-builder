@@ -25,9 +25,11 @@ export class EditorCenterPanelComponent implements OnInit, OnDestroy {
 
   @Output() previewModeChanged = new EventEmitter<'desktop' | 'mobile'>();
   @Output() dataChanged = new EventEmitter<void>();
+  @Output() blockSelected = new EventEmitter<Block>();
 
   mergedSite: MergedSite | null = null;
   isRendering = false;
+  selectedBlockId: string | null = null;
 
   private destroy$ = new Subject<void>();
 
@@ -117,6 +119,24 @@ export class EditorCenterPanelComponent implements OnInit, OnDestroy {
       this.editorStateService.addBlockToTemplate(newBlock, event.currentIndex);
 
       // Emit data changed to trigger save
+      this.dataChanged.emit();
+    }
+  }
+
+  // ========================
+  // BLOCK SELECTION & EDITING
+  // ========================
+
+  selectBlock(block: Block): void {
+    this.selectedBlockId = block.id;
+    this.blockSelected.emit(block);
+    console.log('Block selected:', block);
+  }
+
+  deleteBlock(index: number): void {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce bloc ?')) {
+      this.editorStateService.deleteBlock(index);
+      this.selectedBlockId = null;
       this.dataChanged.emit();
     }
   }

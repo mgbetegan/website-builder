@@ -806,6 +806,51 @@ export class EditorStateService {
   }
 
   /**
+   * Delete a block from the current template
+   */
+  deleteBlock(index: number): void {
+    const currentState = this.stateSubject.value;
+    if (!currentState.currentTemplate) return;
+
+    const structure = [...currentState.currentTemplate.structure];
+    structure.splice(index, 1);
+
+    const updatedTemplate: Template = {
+      ...currentState.currentTemplate,
+      structure
+    };
+
+    this.stateSubject.next({
+      ...currentState,
+      currentTemplate: updatedTemplate,
+      isDirty: true
+    });
+  }
+
+  /**
+   * Update a block's properties
+   */
+  updateBlock(updatedBlock: Block): void {
+    const currentState = this.stateSubject.value;
+    if (!currentState.currentTemplate) return;
+
+    const structure = currentState.currentTemplate.structure.map(block =>
+      block.id === updatedBlock.id ? updatedBlock : block
+    );
+
+    const updatedTemplate: Template = {
+      ...currentState.currentTemplate,
+      structure
+    };
+
+    this.stateSubject.next({
+      ...currentState,
+      currentTemplate: updatedTemplate,
+      isDirty: true
+    });
+  }
+
+  /**
    * Reset v2 state
    */
   resetV2(): void {

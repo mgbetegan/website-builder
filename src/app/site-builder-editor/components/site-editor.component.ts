@@ -16,6 +16,8 @@ import { Site, Template, EditorState } from '../models';
 import { EditorLeftPanelComponent } from './editor-left-panel.component';
 import { EditorCenterPanelComponent } from './editor-center-panel.component';
 import { EditorRightPanelComponent } from './editor-right-panel.component';
+import { BlockEditorModalComponent } from './block-editor-modal.component';
+import { Block } from '../models';
 
 @Component({
   selector: 'app-site-editor',
@@ -24,7 +26,8 @@ import { EditorRightPanelComponent } from './editor-right-panel.component';
     CommonModule,
     EditorLeftPanelComponent,
     EditorCenterPanelComponent,
-    EditorRightPanelComponent
+    EditorRightPanelComponent,
+    BlockEditorModalComponent
   ],
   templateUrl: './site-editor.component.html',
   styleUrls: ['./site-editor.component.scss']
@@ -45,6 +48,9 @@ export class SiteEditorComponent implements OnInit, OnDestroy {
 
   // Active tab in right panel
   rightPanelTab: 'blocks' | 'design' = 'blocks';
+
+  // Block currently being edited
+  editingBlock: Block | null = null;
 
   // Destroy subject for cleanup
   private destroy$ = new Subject<void>();
@@ -299,6 +305,25 @@ export class SiteEditorComponent implements OnInit, OnDestroy {
 
   onRightPanelTabChanged(tab: 'blocks' | 'design'): void {
     this.rightPanelTab = tab;
+  }
+
+  // ========================
+  // BLOCK EDITING
+  // ========================
+
+  onBlockSelected(block: Block): void {
+    this.editingBlock = block;
+  }
+
+  onBlockSaved(block: Block): void {
+    // Update the block in the template
+    this.editorStateService.updateBlock(block);
+    this.editingBlock = null;
+    this.autoSave$.next();
+  }
+
+  onEditorClosed(): void {
+    this.editingBlock = null;
   }
 
   // ========================

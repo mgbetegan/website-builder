@@ -47,10 +47,23 @@
           <!-- Render each block using BlockRenderer -->
           <div *ngFor="let block of mergedSite.structure; let i = index"
                class="block-wrapper"
+               [class.selected]="selectedBlockId === block.id"
                cdkDrag
                [cdkDragData]="block">
-            <div class="drag-handle" cdkDragHandle title="Glisser pour réorganiser">
-              <span class="drag-icon">⋮⋮</span>
+            <div class="block-controls">
+              <div class="drag-handle" cdkDragHandle title="Glisser pour réorganiser">
+                <span class="drag-icon">⋮⋮</span>
+              </div>
+              <button class="btn-edit-block"
+                      (click)="selectBlock(block)"
+                      title="Éditer ce bloc">
+                ✏️
+              </button>
+              <button class="btn-delete-block"
+                      (click)="deleteBlock(i)"
+                      title="Supprimer ce bloc">
+                🗑️
+              </button>
             </div>
             <app-block-renderer
               [block]="block"

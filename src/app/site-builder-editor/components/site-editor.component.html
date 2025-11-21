@@ -79,6 +79,7 @@
         [template]="editorState.currentTemplate"
         [previewMode]="previewMode"
         (previewModeChanged)="onPreviewModeChanged($event)"
+        (blockSelected)="onBlockSelected($event)"
         (dataChanged)="onDataChanged()">
       </app-editor-center-panel>
     </section>
@@ -112,3 +113,12 @@
   <p>{{ loadingError }}</p>
   <button class="btn-primary" (click)="goBack()">Retour au dashboard</button>
 </div>
+
+<!-- ======================== -->
+<!-- BLOCK EDITOR MODAL -->
+<!-- ======================== -->
+<app-block-editor-modal
+  [block]="editingBlock"
+  (saved)="onBlockSaved($event)"
+  (closed)="onEditorClosed()">
+</app-block-editor-modal>
