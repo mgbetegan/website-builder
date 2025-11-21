@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { CanvasComponent } from './components/canvas/canvas.component';
 import { PropertiesPanelComponent } from './components/properties-panel/properties-panel.component';
@@ -11,7 +12,7 @@ import { Project } from './services/api.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, ToolbarComponent, CanvasComponent, PropertiesPanelComponent, GuestBookComponent],
+  imports: [CommonModule, RouterOutlet, ToolbarComponent, CanvasComponent, PropertiesPanelComponent, GuestBookComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

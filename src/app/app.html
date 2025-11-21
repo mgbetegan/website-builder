@@ -1,40 +1,46 @@
 <div class="app-container">
-  <header class="app-header">
-    <div class="header-left">
-      <h1>{{ title }}</h1>
-      @if (currentProject) {
-        <p class="project-name">{{ currentProject.name }}</p>
+  <!-- Router outlet for site-builder and other routed components -->
+  <router-outlet></router-outlet>
+
+  <!-- Original builder content (shown when no route is active) -->
+  <div class="builder-content">
+    <header class="app-header">
+      <div class="header-left">
+        <h1>{{ title }}</h1>
+        @if (currentProject) {
+          <p class="project-name">{{ currentProject.name }}</p>
+        }
+      </div>
+      <div class="header-right">
+        <div class="save-status" [ngClass]="saveStatusClass">
+          <span class="status-text">{{ saveStatusText }}</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="app-content">
+      @if (currentView === ViewMode.BUILDER) {
+        <aside class="sidebar left">
+          <app-toolbar></app-toolbar>
+        </aside>
+
+        <main class="main-canvas">
+          <app-canvas></app-canvas>
+        </main>
+
+        <aside class="sidebar right">
+          <app-properties-panel></app-properties-panel>
+        </aside>
+      } @else if (currentView === ViewMode.GUESTBOOK) {
+        <div class="guestbook-view">
+          <div class="guestbook-header-toolbar">
+            <button class="btn-back" (click)="viewService.setView(ViewMode.BUILDER)">
+              ← Retour au Builder
+            </button>
+          </div>
+          <app-guestbook></app-guestbook>
+        </div>
       }
     </div>
-    <div class="header-right">
-      <div class="save-status" [ngClass]="saveStatusClass">
-        <span class="status-text">{{ saveStatusText }}</span>
-      </div>
-    </div>
-  </header>
-
-  <div class="app-content">
-    @if (currentView === ViewMode.BUILDER) {
-      <aside class="sidebar left">
-        <app-toolbar></app-toolbar>
-      </aside>
-
-      <main class="main-canvas">
-        <app-canvas></app-canvas>
-      </main>
-
-      <aside class="sidebar right">
-        <app-properties-panel></app-properties-panel>
-      </aside>
-    } @else if (currentView === ViewMode.GUESTBOOK) {
-      <div class="guestbook-view">
-        <div class="guestbook-header-toolbar">
-          <button class="btn-back" (click)="viewService.setView(ViewMode.BUILDER)">
-            ← Retour au Builder
-          </button>
-        </div>
-        <app-guestbook></app-guestbook>
-      </div>
-    }
   </div>
 </div>
