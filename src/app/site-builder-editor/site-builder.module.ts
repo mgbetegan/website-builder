@@ -13,6 +13,9 @@ import { EditorStateService } from './services/editor-state.service';
 import { TemplateService } from './services/template.service';
 import { SiteService } from './services/site.service';
 import { TemplateMergeService } from './services/template-merge.service';
+import { PageService } from './services/page.service';
+import { BlockLibraryService } from './services/block-library.service';
+import { NavigationService } from './services/navigation.service';
 
 // Main Components
 import { SiteEditorComponent } from './components/site-editor.component';
@@ -21,7 +24,7 @@ import { EditorCenterPanelComponent } from './components/editor-center-panel.com
 import { EditorRightPanelComponent } from './components/editor-right-panel.component';
 import { BlockRendererComponent } from './components/block-renderer.component';
 
-// Block Components
+// Block Components (v1)
 import { NavigationBlockComponent } from './blocks/navigation-block.component';
 import { HeroBlockComponent } from './blocks/hero-block.component';
 import { InvitationCardBlockComponent } from './blocks/invitation-card-block.component';
@@ -32,6 +35,13 @@ import { FAQSectionBlockComponent } from './blocks/faq-section-block.component';
 import { AccordionItemBlockComponent } from './blocks/accordion-item-block.component';
 import { RSVPFormBlockComponent } from './blocks/rsvp-form-block.component';
 
+// Block Components (v2+)
+import { TextSectionBlockComponent } from './blocks/text-section-block.component';
+import { ButtonBlockComponent } from './blocks/button-block.component';
+import { FormCustomBlockComponent } from './blocks/form-custom-block.component';
+import { FaqCustomBlockComponent } from './blocks/faq-custom-block.component';
+import { DividerBlockComponent } from './blocks/divider-block.component';
+
 @NgModule({
   declarations: [
     // Main Components
@@ -41,7 +51,7 @@ import { RSVPFormBlockComponent } from './blocks/rsvp-form-block.component';
     EditorRightPanelComponent,
     BlockRendererComponent,
 
-    // Block Components
+    // Block Components (v1)
     NavigationBlockComponent,
     HeroBlockComponent,
     InvitationCardBlockComponent,
@@ -50,7 +60,14 @@ import { RSVPFormBlockComponent } from './blocks/rsvp-form-block.component';
     PersonBioBlockComponent,
     FAQSectionBlockComponent,
     AccordionItemBlockComponent,
-    RSVPFormBlockComponent
+    RSVPFormBlockComponent,
+
+    // Block Components (v2+)
+    TextSectionBlockComponent,
+    ButtonBlockComponent,
+    FormCustomBlockComponent,
+    FaqCustomBlockComponent,
+    DividerBlockComponent
   ],
   imports: [
     CommonModule,
@@ -63,7 +80,10 @@ import { RSVPFormBlockComponent } from './blocks/rsvp-form-block.component';
     EditorStateService,
     TemplateService,
     SiteService,
-    TemplateMergeService
+    TemplateMergeService,
+    PageService,
+    BlockLibraryService,
+    NavigationService
   ],
   exports: [
     SiteEditorComponent

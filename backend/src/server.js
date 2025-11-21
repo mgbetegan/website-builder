@@ -5,6 +5,8 @@ const projectRoutes = require('./routes/project.routes');
 const guestBookRoutes = require('./routes/guestbook.routes');
 const templateRoutes = require('./routes/template.routes');
 const siteRoutes = require('./routes/site.routes');
+const pageRoutes = require('./routes/page.routes');
+const navigationRoutes = require('./routes/navigation.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,6 +27,9 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/guestbooks', guestBookRoutes);
 app.use('/api/templates', templateRoutes);
 app.use('/api/sites', siteRoutes);
+// v2+ routes (nested under /api/sites/:siteId)
+app.use('/api/sites/:siteId/pages', pageRoutes);
+app.use('/api/sites/:siteId/navigation', navigationRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -44,6 +49,8 @@ app.get('/', (req, res) => {
       guestbooks: '/api/guestbooks',
       templates: '/api/templates',
       sites: '/api/sites',
+      pages: '/api/sites/:siteId/pages',
+      navigation: '/api/sites/:siteId/navigation',
       health: '/health'
     }
   });

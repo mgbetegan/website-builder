@@ -64,6 +64,43 @@
     [theme]="theme">
   </app-rsvp-form-block>
 
+  <!-- ============ v2+ BLOCKS ============ -->
+
+  <!-- Text Section Block -->
+  <app-text-section-block
+    *ngSwitchCase="'text_section'"
+    [block]="block"
+    [theme]="theme">
+  </app-text-section-block>
+
+  <!-- Button Block -->
+  <app-button-block
+    *ngSwitchCase="'button'"
+    [block]="block"
+    [theme]="theme">
+  </app-button-block>
+
+  <!-- Form Custom Block -->
+  <app-form-custom-block
+    *ngSwitchCase="'form_custom'"
+    [block]="block"
+    [theme]="theme">
+  </app-form-custom-block>
+
+  <!-- FAQ Custom Block -->
+  <app-faq-custom-block
+    *ngSwitchCase="'faq_custom'"
+    [block]="block"
+    [theme]="theme">
+  </app-faq-custom-block>
+
+  <!-- Divider Block -->
+  <app-divider-block
+    *ngSwitchCase="'divider'"
+    [block]="block"
+    [theme]="theme">
+  </app-divider-block>
+
   <!-- Unknown Block -->
   <div *ngSwitchDefault class="unknown-block">
     <p>⚠️ Type de bloc inconnu: {{ block.type }}</p>
