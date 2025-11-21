@@ -6,12 +6,14 @@ import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EditorStateService } from '../services/editor-state.service';
-import { Template, Theme, Block } from '../models';
+import { BlockLibraryService } from '../services/block-library.service';
+import { Template, Theme, Block, BlockTemplate } from '../models';
+import { BlockLibraryPanelComponent } from './block-library-panel.component';
 
 @Component({
   selector: 'app-editor-right-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BlockLibraryPanelComponent],
   templateUrl: './editor-right-panel.component.html',
   styleUrls: ['./editor-right-panel.component.scss']
 })
@@ -47,7 +49,10 @@ export class EditorRightPanelComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private editorStateService: EditorStateService) {}
+  constructor(
+    private editorStateService: EditorStateService,
+    private blockLibraryService: BlockLibraryService
+  ) {}
 
   ngOnInit(): void {
     // Subscribe to theme changes
@@ -135,5 +140,23 @@ export class EditorRightPanelComponent implements OnInit, OnDestroy {
       rsvp_form: 'Formulaire RSVP'
     };
     return labels[blockType] || blockType;
+  }
+
+  // ========================
+  // BLOCK LIBRARY
+  // ========================
+
+  onBlockSelected(blockTemplate: BlockTemplate): void {
+    console.log('Block selected:', blockTemplate);
+
+    // Create a new block from the template
+    const newBlock = this.blockLibraryService.createBlockFromTemplate(blockTemplate.type);
+
+    // TODO: Add block to current page/template
+    // For now, just log it - will need to implement addBlock functionality in EditorStateService
+    console.log('New block created:', newBlock);
+
+    // Emit dataChanged to trigger save
+    this.dataChanged.emit();
   }
 }

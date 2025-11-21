@@ -19,6 +19,20 @@
 
   <!-- BLOCKS TAB -->
   <div class="panel-content" *ngIf="activeTab === 'blocks'">
+    <!-- Bibliothèque de blocs v2+ -->
+    <div class="info-section">
+      <h4>📚 Ajouter des Blocs</h4>
+      <p>Cliquez sur un bloc pour l'ajouter à votre page.</p>
+    </div>
+
+    <app-block-library-panel
+      (blockSelected)="onBlockSelected($event)">
+    </app-block-library-panel>
+
+    <!-- Divider -->
+    <div class="section-divider"></div>
+
+    <!-- Structure existante -->
     <div class="info-section">
       <h4>Structure du Site</h4>
       <p>Voici la structure de votre site. Les blocs sont organisés hiérarchiquement.</p>
