@@ -851,6 +851,44 @@ export class EditorStateService {
   }
 
   /**
+   * Add a child block to a parent block
+   */
+  addChildBlock(parentId: string, childBlock: Block): void {
+    const currentState = this.stateSubject.value;
+    if (!currentState.currentTemplate) return;
+
+    const updateBlockRecursively = (blocks: Block[]): Block[] => {
+      return blocks.map(block => {
+        if (block.id === parentId) {
+          return {
+            ...block,
+            children: [...(block.children || []), childBlock]
+          };
+        } else if (block.children && block.children.length > 0) {
+          return {
+            ...block,
+            children: updateBlockRecursively(block.children)
+          };
+        }
+        return block;
+      });
+    };
+
+    const structure = updateBlockRecursively(currentState.currentTemplate.structure);
+
+    const updatedTemplate: Template = {
+      ...currentState.currentTemplate,
+      structure
+    };
+
+    this.stateSubject.next({
+      ...currentState,
+      currentTemplate: updatedTemplate,
+      isDirty: true
+    });
+  }
+
+  /**
    * Reset v2 state
    */
   resetV2(): void {

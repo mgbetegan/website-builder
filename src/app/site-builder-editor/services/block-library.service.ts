@@ -271,6 +271,19 @@ export class BlockLibraryService {
   }
 
   /**
+   * Check if a block type can have children
+   */
+  canHaveChildren(blockType: BlockType): boolean {
+    const containerBlocks: BlockType[] = [
+      'couple_section',
+      'faq_section',
+      'grid',
+      'columns'
+    ];
+    return containerBlocks.includes(blockType);
+  }
+
+  /**
    * Clear the cache
    */
   clearCache(): void {
