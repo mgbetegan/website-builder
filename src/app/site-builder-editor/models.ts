@@ -6,6 +6,7 @@
 // ========================
 
 export type BlockType =
+  // v1 blocks
   | 'navigation'
   | 'hero'
   | 'invitation_card'
@@ -14,7 +15,18 @@ export type BlockType =
   | 'person_bio'
   | 'faq_section'
   | 'accordion_item'
-  | 'rsvp_form';
+  | 'rsvp_form'
+  // v2+ customizable blocks
+  | 'text_section'
+  | 'form_custom'
+  | 'faq_custom'
+  | 'gallery'
+  | 'testimonials'
+  | 'schedule'
+  | 'guest_list'
+  | 'button'
+  | 'divider'
+  | 'contact_form';
 
 // ========================
 // BLOCK INTERFACE
@@ -23,8 +35,10 @@ export type BlockType =
 export interface Block {
   id: string;
   type: BlockType;
+  pageId?: string;              // v2+: Which page does this block belong to?
   properties: Record<string, any>;
   children?: Block[];
+  order?: number;               // v2+: Position in the page
 }
 
 // ========================
@@ -227,4 +241,249 @@ export interface RSVPSubmission {
 export interface RSVPResponse {
   success: boolean;
   message: string;
+}
+
+// ========================
+// v2+ INTERFACES - PAGES MULTIPLES
+// ========================
+
+// ========================
+// PAGE INTERFACE
+// ========================
+
+export interface PageMeta {
+  showInMenu: boolean;
+  isHomepage: boolean;
+  icon?: string;
+  seo?: {
+    title: string;
+    description: string;
+  };
+}
+
+export interface Page {
+  id: string;
+  site_id: number;
+  title: string;
+  slug: string;
+  description?: string;
+  order: number;
+  structure: Block[];
+  meta: PageMeta;
+  created_at: string;
+  updated_at: string;
+}
+
+// ========================
+// FORM FIELD (for customizable forms)
+// ========================
+
+export interface FormFieldValidation {
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
+  customMessage?: string;
+}
+
+export interface FormFieldOption {
+  value: string;
+  label: string;
+}
+
+export interface FormField {
+  id: string;
+  name: string;
+  label: string;
+  type: 'text' | 'email' | 'tel' | 'textarea' | 'select' | 'radio' | 'checkbox' | 'number' | 'date';
+  required: boolean;
+  placeholder?: string;
+  validation?: FormFieldValidation;
+  options?: FormFieldOption[];
+}
+
+// ========================
+// BLOCK TEMPLATE (Block Library)
+// ========================
+
+export type BlockCategory = 'content' | 'form' | 'social' | 'media' | 'navigation' | 'layout';
+
+export interface BlockTemplate {
+  id: string;
+  type: BlockType;
+  name: string;
+  description: string;
+  category: BlockCategory;
+  icon: string;
+  defaultProperties: Record<string, any>;
+  editableFields: FieldDefinition[];
+  requiresConfig: boolean;
+  preview?: string;
+}
+
+// ========================
+// NAVIGATION MENU
+// ========================
+
+export interface MenuItem {
+  id: string;
+  label: string;
+  pageId: string;
+  order: number;
+  children?: MenuItem[];
+  isVisible: boolean;
+  icon?: string;
+}
+
+export interface NavigationMenu {
+  site_id: number;
+  items: MenuItem[];
+  style: 'horizontal' | 'vertical' | 'dropdown';
+}
+
+// ========================
+// PAGE ROUTE (for linking between pages)
+// ========================
+
+export interface PageRoute {
+  id: string;
+  fromBlockId: string;
+  toPageId: string;
+  action: 'navigate' | 'scroll' | 'modal';
+}
+
+// ========================
+// SITE INTERFACE (Extended for v2+)
+// ========================
+
+export interface SiteExtended extends Site {
+  mode: 'template' | 'pages';
+  default_page_id?: number;
+}
+
+// ========================
+// EDITOR STATE (Extended for v2+)
+// ========================
+
+export interface EditorStateV2 extends EditorState {
+  // v2+ additions
+  pages: Page[];
+  currentPage: Page | null;
+  currentBlock: Block | null;
+  blockLibrary: BlockTemplate[];
+  navigationMenu: NavigationMenu | null;
+  mode: 'template' | 'pages';
+}
+
+// ========================
+// MERGED PAGE (for rendering)
+// ========================
+
+export interface MergedPage {
+  page: Page;
+  structure: Block[];
+  theme: Theme;
+  navigation: NavigationMenu | null;
+}
+
+// ========================
+// GALLERY ITEM
+// ========================
+
+export interface GalleryItem {
+  id: string;
+  url: string;
+  caption?: string;
+  order: number;
+}
+
+// ========================
+// TESTIMONIAL
+// ========================
+
+export interface Testimonial {
+  id: string;
+  name: string;
+  photo?: string;
+  text: string;
+  rating?: number;
+  order: number;
+}
+
+// ========================
+// SCHEDULE EVENT
+// ========================
+
+export interface ScheduleEvent {
+  id: string;
+  time: string;
+  title: string;
+  description?: string;
+  location?: string;
+  order: number;
+}
+
+// ========================
+// FAQ ITEM (for custom FAQs)
+// ========================
+
+export interface FAQItem {
+  id: string;
+  question: string;
+  answer: string;
+  order: number;
+  open?: boolean;
+}
+
+// ========================
+// API TYPES FOR v2+
+// ========================
+
+export interface CreatePageRequest {
+  site_id: number;
+  title: string;
+}
+
+export interface UpdatePageRequest {
+  title?: string;
+  slug?: string;
+  description?: string;
+  order?: number;
+  structure?: Block[];
+  meta?: Partial<PageMeta>;
+}
+
+export interface AddBlockToPageRequest {
+  blockType: BlockType;
+  properties: Record<string, any>;
+  order?: number;
+}
+
+export interface UpdateBlockRequest {
+  properties: Record<string, any>;
+}
+
+export interface ReorderPagesRequest {
+  pageIds: string[];
+}
+
+export interface ReorderBlocksRequest {
+  blockIds: string[];
+}
+
+export interface UpdateNavigationRequest {
+  items: MenuItem[];
+  style?: 'horizontal' | 'vertical' | 'dropdown';
+}
+
+export interface FormSubmission {
+  id: number;
+  site_id: number;
+  form_block_id: string;
+  guest_data: Record<string, any>;
+  created_at: string;
+}
+
+export interface FormSubmissionRequest {
+  formBlockId: string;
+  fields: Record<string, any>;
 }
