@@ -5,6 +5,12 @@
   <div class="panel-tabs">
     <button
       class="tab"
+      [class.active]="activeTab === 'pages'"
+      (click)="switchTab('pages')">
+      Pages
+    </button>
+    <button
+      class="tab"
       [class.active]="activeTab === 'content'"
       (click)="switchTab('content')">
       Contenu
@@ -15,6 +21,11 @@
       (click)="switchTab('design')">
       Design
     </button>
+  </div>
+
+  <!-- PAGES TAB (v2+) -->
+  <div class="panel-content" *ngIf="activeTab === 'pages'">
+    <app-pages-panel></app-pages-panel>
   </div>
 
   <!-- CONTENT TAB -->

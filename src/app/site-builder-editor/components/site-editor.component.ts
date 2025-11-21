@@ -41,7 +41,7 @@ export class SiteEditorComponent implements OnInit, OnDestroy {
   previewMode: 'desktop' | 'mobile' = 'desktop';
 
   // Active tab in left panel
-  leftPanelTab: 'content' | 'design' = 'content';
+  leftPanelTab: 'pages' | 'content' | 'design' = 'pages';
 
   // Active tab in right panel
   rightPanelTab: 'blocks' | 'design' = 'blocks';
@@ -293,7 +293,7 @@ export class SiteEditorComponent implements OnInit, OnDestroy {
     this.previewMode = mode;
   }
 
-  onLeftPanelTabChanged(tab: 'content' | 'design'): void {
+  onLeftPanelTabChanged(tab: 'pages' | 'content' | 'design'): void {
     this.leftPanelTab = tab;
   }
 

@@ -7,20 +7,21 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EditorStateService } from '../services/editor-state.service';
 import { Site, Template, CoupleData, FAQ, FieldDefinition } from '../models';
+import { PagesPanelComponent } from './pages-panel.component';
 
 @Component({
   selector: 'app-editor-left-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PagesPanelComponent],
   templateUrl: './editor-left-panel.component.html',
   styleUrls: ['./editor-left-panel.component.scss']
 })
 export class EditorLeftPanelComponent implements OnInit, OnDestroy {
   @Input() site: Site | null = null;
   @Input() template: Template | null = null;
-  @Input() activeTab: 'content' | 'design' = 'content';
+  @Input() activeTab: 'pages' | 'content' | 'design' = 'pages';
 
-  @Output() tabChanged = new EventEmitter<'content' | 'design'>();
+  @Output() tabChanged = new EventEmitter<'pages' | 'content' | 'design'>();
   @Output() dataChanged = new EventEmitter<void>();
 
   coupleData: CoupleData = {};
@@ -48,7 +49,7 @@ export class EditorLeftPanelComponent implements OnInit, OnDestroy {
   // TAB SWITCHING
   // ========================
 
-  switchTab(tab: 'content' | 'design'): void {
+  switchTab(tab: 'pages' | 'content' | 'design'): void {
     this.tabChanged.emit(tab);
   }
 
