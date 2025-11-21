@@ -29,6 +29,32 @@ class Site {
 const sites = [];
 let nextId = 1;
 
+// Initialize with sample data
+function initializeSampleData() {
+  if (sites.length === 0) {
+    // Create a sample site for testing
+    const sampleSite = new Site({
+      id: nextId++,
+      user_id: 1,
+      template_id: 1,
+      couple_name: 'Marie & Jean',
+      couple_data: {
+        bride_name: 'Marie',
+        groom_name: 'Jean',
+        wedding_date: '2024-06-15',
+        wedding_location: 'Château de Versailles'
+      },
+      theme_overrides: {},
+      is_published: false
+    });
+    sites.push(sampleSite);
+    console.log('✅ Sample site created with ID:', sampleSite.id);
+  }
+}
+
+// Initialize on module load
+initializeSampleData();
+
 // Site operations
 class SiteModel {
   static getAll(userId = 1) {
