@@ -3,11 +3,12 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
+import { AccordionItemBlockComponent } from './accordion-item-block.component';
 
 @Component({
   selector: 'app-faq-section-block',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AccordionItemBlockComponent],
   template: `
     <section class="faq-section">
       <div class="faq-container">
@@ -19,6 +20,11 @@ import { Block, Theme } from '../models';
         </p>
 
         <div class="faq-list">
+          <app-accordion-item-block
+            *ngFor="let faqItem of block.children"
+            [block]="faqItem"
+            [theme]="theme">
+          </app-accordion-item-block>
           <p *ngIf="!block.children || block.children.length === 0" [style.color]="theme.colors.text">
             Aucune question pour le moment.
           </p>

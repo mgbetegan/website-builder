@@ -92,21 +92,13 @@
 
             <!-- Image Input -->
             <div *ngIf="field.type === 'image'">
-              <label [for]="field.name">
-                {{ field.label }}
-                <span class="required" *ngIf="field.required">*</span>
-              </label>
-              <input
-                [id]="field.name"
-                type="url"
-                [value]="coupleData[field.name] || ''"
-                (input)="updateField(field.name, $any($event.target).value)"
-                placeholder="URL de l'image"
-              />
+              <app-image-upload
+                [label]="field.label + (field.required ? ' *' : '')"
+                [imageUrl]="coupleData[field.name] || null"
+                (imageUrlChange)="updateField(field.name, $event)"
+                [allowUrlInput]="true">
+              </app-image-upload>
               <small *ngIf="field.helpText">{{ field.helpText }}</small>
-              <div class="image-preview" *ngIf="coupleData[field.name]">
-                <img [src]="coupleData[field.name]" [alt]="field.label" />
-              </div>
             </div>
 
             <!-- FAQ List -->

@@ -17,21 +17,28 @@ import { BlockTemplate, BlockType } from '../models';
         <p class="panel-subtitle">Glissez-déposez les blocs dans votre page</p>
       </div>
 
-      <div class="categories" *ngFor="let category of categories">
-        <h4 class="category-title">{{ getCategoryName(category) }}</h4>
+      <div class="library-content"
+           cdkDropList
+           id="block-library-list"
+           [cdkDropListConnectedTo]="['preview-drop-list', 'empty-drop-list']"
+           [cdkDropListSortingDisabled]="true"
+           (cdkDropListDropped)="onBlockLibraryDrop($event)">
+        <div class="categories" *ngFor="let category of categories">
+          <h4 class="category-title">{{ getCategoryName(category) }}</h4>
 
-        <div class="blocks-grid">
-          <div
-            *ngFor="let block of getBlocksByCategory(category)"
-            class="block-item"
-            cdkDrag
-            [cdkDragData]="block"
-            (cdkDragStarted)="onDragStart($event)"
-            (click)="onBlockClick(block)">
-            <div class="block-icon">{{ block.icon }}</div>
-            <div class="block-info">
-              <div class="block-name">{{ block.name }}</div>
-              <div class="block-description">{{ block.description }}</div>
+          <div class="blocks-grid">
+            <div
+              *ngFor="let block of getBlocksByCategory(category)"
+              class="block-item"
+              cdkDrag
+              [cdkDragData]="block"
+              (cdkDragStarted)="onDragStart($event)"
+              (click)="onBlockClick(block)">
+              <div class="block-icon">{{ block.icon }}</div>
+              <div class="block-info">
+                <div class="block-name">{{ block.name }}</div>
+                <div class="block-description">{{ block.description }}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -67,6 +74,11 @@ import { BlockTemplate, BlockType } from '../models';
       margin: 0;
       font-size: 0.875rem;
       color: #666;
+    }
+
+    .library-content {
+      flex: 1;
+      overflow-y: auto;
     }
 
     .categories {
@@ -213,5 +225,10 @@ export class BlockLibraryPanelComponent implements OnInit {
 
   onDragStart(event: CdkDragStart): void {
     console.log('Drag started:', event.source.data);
+  }
+
+  onBlockLibraryDrop(event: any): void {
+    // Do nothing - we don't want blocks to be removed from the library
+    // The library is just a source for copying blocks
   }
 }

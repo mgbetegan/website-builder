@@ -172,20 +172,12 @@
 
 .site-preview {
   width: 100%;
-  font-family: var(--font-body);
-  color: var(--text);
-  background: var(--background);
-
-  // Apply CSS variables for theme
-  --primary: #8B7355;
-  --secondary: #D4AF37;
-  --text: #2C2C2C;
-  --background: #FFFFFF;
-  --font-heading: 'Playfair Display', serif;
-  --font-body: 'Montserrat', sans-serif;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  color: var(--text, #2C2C2C);
+  background: var(--background, #FFFFFF);
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading);
+    font-family: var(--font-heading, 'Playfair Display', serif);
   }
 }
 

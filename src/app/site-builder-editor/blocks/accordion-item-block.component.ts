@@ -1,6 +1,6 @@
 // 📋 ACCORDION ITEM BLOCK
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Block, Theme } from '../models';
 
@@ -78,7 +78,7 @@ import { Block, Theme } from '../models';
     }
   `]
 })
-export class AccordionItemBlockComponent {
+export class AccordionItemBlockComponent implements OnInit {
   @Input() block!: Block;
   @Input() theme!: Theme;
 

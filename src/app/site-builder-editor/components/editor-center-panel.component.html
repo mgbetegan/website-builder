@@ -34,7 +34,9 @@
       <div class="preview-content"
            *ngIf="!isRendering && mergedSite"
            cdkDropList
+           id="preview-drop-list"
            [cdkDropListData]="mergedSite.structure"
+           [cdkDropListConnectedTo]="['block-library-list']"
            (cdkDropListDropped)="onBlockDrop($event)">
         <div class="site-preview" [style.--primary]="mergedSite.theme.colors.primary"
                                     [style.--secondary]="mergedSite.theme.colors.secondary"
@@ -62,6 +64,8 @@
       <div class="preview-empty"
            *ngIf="!isRendering && !mergedSite"
            cdkDropList
+           id="empty-drop-list"
+           [cdkDropListConnectedTo]="['block-library-list']"
            (cdkDropListDropped)="onBlockDrop($event)">
         <div class="empty-icon">📄</div>
         <p>Aucun contenu à afficher</p>

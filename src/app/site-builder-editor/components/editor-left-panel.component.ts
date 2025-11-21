@@ -8,11 +8,12 @@ import { takeUntil } from 'rxjs/operators';
 import { EditorStateService } from '../services/editor-state.service';
 import { Site, Template, CoupleData, FAQ, FieldDefinition } from '../models';
 import { PagesPanelComponent } from './pages-panel.component';
+import { ImageUploadComponent } from './image-upload.component';
 
 @Component({
   selector: 'app-editor-left-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule, PagesPanelComponent],
+  imports: [CommonModule, FormsModule, PagesPanelComponent, ImageUploadComponent],
   templateUrl: './editor-left-panel.component.html',
   styleUrls: ['./editor-left-panel.component.scss']
 })
